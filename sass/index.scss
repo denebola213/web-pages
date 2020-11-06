@@ -1,0 +1,61 @@
+@import "base.scss";
+
+body {
+    height: 100vh;
+    width: 100vw;
+}
+
+a {
+    color: $base3;
+}
+
+.category * {
+    transition: color 0.3s;
+}
+
+.category:hover {
+    * {
+        color: $blue;
+    }
+    text-decoration: none;
+}
+
+main {
+    text-align: center;
+}
+
+#logo {
+    margin: 5vh 20vw;
+}
+
+#title {
+    font-size: 2rem;
+    color: $green;
+    margin-bottom: 2rem;
+}
+
+@media (min-width: 860px) {
+    #title {
+        font-size: calc(2rem + ((1vw - 8.6px) * 11.429));
+    }
+}
+
+@media (min-width: 1280px) {
+    #title {
+        font-size: 5rem;
+    }
+}
+
+.category {
+    margin: 1rem 0;
+    font-size: 2rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+        display: block;
+        margin-right: 1rem;
+    }
+}

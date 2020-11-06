@@ -1,0 +1,69 @@
+<div id="main-header">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="/">studio_albireo</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-nav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar-nav">
+            <div class="navbar-nav">
+                <a class="nav-link" id="main-header-nav-tech" href="/tech">Tech</a>
+                <a class="nav-link" id="main-header-nav-diary" href="/diary">Diary</a>
+                <a class="nav-link" id="main-header-nav-about" href="/about">About</a>
+                <a class="nav-link" id="main-header-nav-tags" href="/tags">Tags</a>
+            </div>
+        </div>
+    </nav>
+
+    <nav aria-label="breadcrumb" id="page-breadcrumb">
+        <ol class="breadcrumb"  id="page-breadcrumb-list">
+            <!-- <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Library</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Home</li> -->
+        </ol>
+    </nav>
+
+    <script>
+        const regex = /\/([^\/]+)/g
+        const path = location.pathname
+
+        let resultList = []
+        let listInnerHTMLTmp = '<li class="breadcrumb-item"><a href="/">home</a></li>\n'
+        let unionPath = ''
+        let listInnerHTML = ''
+
+        let tmpre
+        while ((tmpre = regex.exec(path)) !== null) {
+            resultList.push(tmpre)
+            listInnerHTML += listInnerHTMLTmp + '\n'
+            unionPath += tmpre[0]
+            listInnerHTMLTmp = '<li class="breadcrumb-item"><a href="'+ unionPath +'">'+ tmpre[1] +'</a></li>'
+        }
+
+        listInnerHTML += '<li class="breadcrumb-item active"  aria-current="page">'+ resultList[resultList.length - 1][1] +'</li>'
+        document.getElementById("page-breadcrumb-list").innerHTML = listInnerHTML
+
+        if (resultList.length >= 1) {
+            switch (resultList[0][1]) {
+                case "tech":
+                    var tech = document.getElementById("main-header-nav-tech");
+                    tech.classList.add("active");
+                    break;
+                case "diary":
+                    var diary = document.getElementById("main-header-nav-diary");
+                    diary.classList.add("active");
+                    break;
+                case "about":
+                    var about = document.getElementById("main-header-nav-about");
+                    about.classList.add("active");
+                    break;
+                case "tags":
+                    var tags = document.getElementById("main-header-nav-tags");
+                    tags.classList.add("active");
+                    break;
+                default:
+                    break;
+            }
+        }
+    </script>
+</div>

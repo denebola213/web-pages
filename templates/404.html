@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+404 NotFound
+{% endblock title %}
+
+{% block style %}
+<style>
+    html, body, main {
+        height: 100%;
+    }
+
+    .not-found {
+        font-size: 4rem;
+        width: 100%;
+        height: 100%;
+
+        display: -webkit-flex;
+        display: flex;
+        -webkit-align-items: center; /* 縦方向中央揃え（Safari用） */
+        align-items: center; /* 縦方向中央揃え */
+        -webkit-justify-content: center; /* 横方向中央揃え（Safari用） */
+        justify-content: center; /* 横方向中央揃え */
+    }
+</style>
+{% endblock style %}
+
+{% block main %}
+<p class="not-found">4 0 4.</p>
+{% endblock main %}

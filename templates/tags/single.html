@@ -1,0 +1,17 @@
+{% import "macros/page.html" as page_macros %}
+{% extends "section.html" %}
+
+
+{% block title %}
+{{ term.name }}
+{% endblock title %}
+
+{% block main %}
+<h1 class="section-title">Tag: #{{ term.name }}</h1>
+
+{% for page in term.pages %}
+    <section class="section-page-block">
+        {{ page_macros::print_diary_item(page=page) }}
+    </section>
+{% endfor %}
+{% endblock main %}

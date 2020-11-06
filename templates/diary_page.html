@@ -1,0 +1,29 @@
+{% import "macros/page.html" as page_macros %}
+{% extends "base.html" %}
+
+
+{% block title %}
+{{ page.title }}
+{% endblock title %}
+
+{% block style %}
+<style>
+#diary-content {
+    margin-top: 2rem;
+}
+</style>
+{% endblock style %}
+
+{% block main %}
+<div class="markdown-content">
+    <h1>{{ page.title }}</h1>
+    <p class="date-info">
+        {{ self::print_date(page=page) }} <br/>
+        {{ self::print_tags(page=page) }}
+    </p>
+    <div id="diary-content">
+        {{ page.content | safe }}
+    </div>
+</div>
+
+{% endblock main %}

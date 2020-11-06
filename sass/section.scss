@@ -1,0 +1,34 @@
+@import "base.scss";
+
+main {
+    width: 50%;
+    margin: 0 auto;
+}
+
+.markdown-content {
+    @import "solarized.scss";
+}
+
+.date-info {
+    color: $base0;
+}
+
+.line-through {
+    text-decoration: line-through;
+}
+
+.section-title {
+    font-weight: 700;
+    font-size: 2.7rem;
+    color: $magenta;
+    margin-bottom: 2.5rem;
+}
+
+.section-content {
+    font-size: 1.3rem;
+    margin-bottom: 2.5rem;
+}
+
+.section-page-block {
+    margin-bottom: 2rem;
+}

@@ -1,0 +1,47 @@
+{% import "macros/page.html" as page_macros %}
+
+{% macro print_page_heading(section,index) %}
+
+    {% if index == 1 %}
+        <h1> <a href="{{ section.permalink | safe }}">{{ section.title }}</a> </h1>
+    {% elif index == 2 %}
+        <h2> <a href="{{ section.permalink | safe }}">{{ section.title }}</a> </h2>
+    {% elif index == 3 %}
+        <h3> <a href="{{ section.permalink | safe }}">{{ section.title }}</a> </h3>
+    {% elif index == 4 %}
+        <h4> <a href="{{ section.permalink | safe }}">{{ section.title }}</a> </h4>
+    {% elif index == 5 %}
+        <h5> <a href="{{ section.permalink | safe }}">{{ section.title }}</a> </h5>
+    {% elif index == 6 %}
+        <h6> <a href="{{ section.permalink | safe }}">{{ section.title }}</a> </h6>
+    {% else %}
+        <p> <a href="{{ section.permalink | safe }}">{{ section.title }}</a> </p>
+    {% endif %}
+
+{% endmacro print_page_heading %}
+
+{% macro print_tech_items(section,index) %}
+    <ul>
+        {% for tech_page in section.pages %}
+            <li>
+                <p class="tech-page-title"><a href="{{ tech_page.permalink | safe }}">{{tech_page.title}}</a></p>
+                <div class="date-info">
+                    {{ page_macros::print_date(page=tech_page) }} <br/>
+                    {{ page_macros::print_tags(page=tech_page) }}
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+    {% if index < 7 %}
+        {% for sec_path in section.subsections %}
+            {% set subsec = get_section(path=sec_path) -%}
+            {% set next_index = index + 1 -%}
+            <section class="child-section">
+                {{ self::print_page_heading(section=subsec,index=next_index) }}
+                <p>{{ subsec.content | safe }}</p>
+                {{ self::print_tech_items(section=subsec,index=next_index) }}
+            </section>
+        {% endfor %}
+    {% endif %}
+
+{% endmacro print_tech_items %}

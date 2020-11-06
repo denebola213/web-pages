@@ -1,0 +1,21 @@
+{% import "macros/page.html" as page_macros %}
+{% extends "base.html" %}
+
+
+{% block title %}
+{{ section.title }}
+{% endblock title %}
+
+{% block main %}
+<article>
+    <h1 class='section-title'>{{ section.title }}</h1>
+
+    <div class="section-content">{{ section.content | safe  }}</div>
+
+    {% for page in section.pages %}
+    <section class="section-page-block">
+        {{ page_macros::print_diary_item(page=page) }}
+    </section>
+    {% endfor %}
+</article>
+{% endblock main %}

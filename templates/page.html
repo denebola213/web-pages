@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ page.title }}
+{% endblock title %}
+
+{% block main %}
+<div class="markdown-content">
+    {{ page.content | safe }}
+</div>
+
+{% endblock main %}

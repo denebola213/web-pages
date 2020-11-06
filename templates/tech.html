@@ -1,0 +1,20 @@
+{% import "macros/section.html" as sec_macros %}
+{% extends "base.html" %}
+
+{% block title %}
+{{ section.title }}
+{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="/tech.css">
+{% endblock style %}
+
+{% block main %}
+<article>
+    <h1 class='section-title'> {{ section.title }} </h1>
+    <div class="section-content">{{ section.content | safe  }}</div>
+    <div>
+        {{ sec_macros::print_tech_items(section=section,index=1) }}
+    </div>
+</article>
+{% endblock main %}

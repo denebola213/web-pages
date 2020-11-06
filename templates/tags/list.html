@@ -1,0 +1,42 @@
+{% extends "section.html" %}
+
+
+{% block title %}
+{{ taxonomy.name }}
+{% endblock title %}
+
+{% block style %}
+<style>
+    .tag-list {
+        list-style-image: url(./tag.svg);
+    }
+    .tag-link {
+        margin: 0.5rem auto;
+    }
+
+    .tag-link a {
+        margin-left: 0.2rem;
+    }
+</style>
+{% endblock style %}
+
+{% block main %}
+{% if terms %}
+<h1 class="section-title">Tag list</h1>
+<div class="tag-list container">
+    {% for term in terms %}
+    <div class="row tag-link">
+        <div class="col-5">
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1H2zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+            </svg>
+            <a href="{{ term.permalink | safe }}">#{{ term.name }}</a>
+        </div>
+        <div class="col">
+            ({{ term.pages | length }})
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock main %}
