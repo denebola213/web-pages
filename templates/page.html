@@ -1,10 +1,15 @@
 {% extends "base.html" %}
+{% import "macros/page.html" as page_macros %}
 
 {% block title %}
 {{ page.title }}
 {% endblock title %}
 
 {% block main %}
+<p class="date-info">
+    {{ page_macros::print_date(page=page) }} <br/>
+    {{ page_macros::print_tags(page=page) }}
+</p>
 <div class="markdown-content">
     {{ page.content | safe }}
 </div>
