@@ -1,8 +1,21 @@
-@import "base.scss";
+@import "./base.scss";
+@import "./header.scss";
 
 main {
-    width: 50%;
+    width: 90%;
     margin: 0 auto;
+}
+
+@include media-breakpoint-up(sm) {
+    main {
+        width: 70%;
+    }
+}
+
+@include media-breakpoint-up(md) {
+    main {
+        width: 50%;
+    }
 }
 
 .markdown-content {
