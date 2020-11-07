@@ -75,10 +75,6 @@ discordapp.com/oauth2/authorize?client_id=**Client ID**&scope=bot&permissions=0
 ## Discord上で/hello
 ちゃんと返って来たら、正常に稼働しています。
 お疲れ様でした。  
-  
-  
-どうだったでしょうか？ちゃんと動きましたか？
-もしダメなときはコメント頂けたら、お手伝い出来るかもしれません。(気まぐれで)  
 
 ## 参考サイト
 + [Asamac blog - Discord Bot の 簡単な作り方](https://asamacs.wordpress.com/2016/06/22/discord-bot-の-簡単な作り方/)  
