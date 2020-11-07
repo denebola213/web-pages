@@ -31,5 +31,5 @@ Lenovo ThinkPad E495
 
 - Twitter: [@denebola213](https://twitter.com/denebola213)
 - Github: [denebola213](https://github.com/denebola213)
-    - このサイトのリポジトリ: [denebola213](https://github.com/denebola213)
+    - このサイトのリポジトリ: [web-pages](https://github.com/denebola213/web-pages)
 
