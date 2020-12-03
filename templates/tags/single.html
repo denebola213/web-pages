@@ -7,11 +7,11 @@
 {% endblock title %}
 
 {% block main %}
-<h1 class="section-title">Tag: #{{ term.name }}</h1>
+<h1 class="section-title">Tag: <span id="tag-name">#{{ term.name }}</span> </h1>
 
 {% for page in term.pages %}
-    <section class="section-page-block">
-        {{ page_macros::print_diary_item(page=page) }}
-    </section>
+<section class="section-page-block">
+    {{ page_macros::print_diary_item(page=page) }}
+</section>
 {% endfor %}
 {% endblock main %}

@@ -16,7 +16,7 @@
     </nav>
 
     <nav aria-label="breadcrumb" id="page-breadcrumb">
-        <ol class="breadcrumb"  id="page-breadcrumb-list">
+        <ol class="breadcrumb" id="page-breadcrumb-list">
             <!-- <li class="breadcrumb-item"><a href="#">Home</a></li>
             <li class="breadcrumb-item"><a href="#">Library</a></li>
             <li class="breadcrumb-item active" aria-current="page">Home</li> -->
@@ -37,10 +37,15 @@
             resultList.push(tmpre)
             listInnerHTML += listInnerHTMLTmp + '\n'
             unionPath += tmpre[0]
-            listInnerHTMLTmp = '<li class="breadcrumb-item"><a href="'+ unionPath +'">'+ tmpre[1] +'</a></li>'
+            listInnerHTMLTmp = '<li class="breadcrumb-item"><a href="' + unionPath + '">' + tmpre[1] + '</a></li>'
         }
 
-        listInnerHTML += '<li class="breadcrumb-item active"  aria-current="page">'+ resultList[resultList.length - 1][1] +'</li>'
+        if (resultList[resultList.length - 2] != null && resultList[resultList.length - 2][1] === "tags") {
+            listInnerHTML += '<li class="breadcrumb-item active"  aria-current="page">' + /(.+)\s+-\sstudio_albireo/g.exec(document.title)[1] + '</li>'
+        }
+        else {
+            listInnerHTML += '<li class="breadcrumb-item active"  aria-current="page">' + resultList[resultList.length - 1][1] + '</li>'
+        }
         document.getElementById("page-breadcrumb-list").innerHTML = listInnerHTML
 
         if (resultList.length >= 1) {
