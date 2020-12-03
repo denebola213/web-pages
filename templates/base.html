@@ -9,6 +9,33 @@
     <link rel="icon" href="/favicon.ico">
     <title>{% block title %} {% endblock title %} - studio_albireo</title>
 
+
+    {% if page.title %}
+    <meta name="og:url" content="{{ config.base_url }}{{ page.path }}">
+    <meta name="og:title" content="{{ page.title }} - studio_albireo">
+    <meta name="og:type" content="website">
+    {% elif section.title %}
+    <meta name="og:url" content="{{ config.base_url }}{{ section.path }}">
+    <meta name="og:title" content="{{ section.title }} - studio_albireo">
+    <meta name="og:type" content="article">
+    {% else %}
+    <meta name="og:url" content="{{ config.base_url }}">
+    <meta name="og:title" content="studio_albireo">
+    <meta name="og:type" content="website">
+    {% endif %}
+
+    {% if page.summary %}
+    <meta name="og:description" content="{{ page.summary | safe }}">
+    {% else %}
+    <meta name="og:description" content="debebola's web pages.">
+    {% endif %}
+
+    {% if page.extra.thumbnail %}
+    <meta name="og:image" content="{{ resize_image(path=page.extra.thumbnail, width=360, height=360, op='fit') }}">
+    {% else %}
+    <meta name="og:image" content="{{ config.base_url }}/dene.png">
+    {% endif %}
+
     {% block style %}
     {% endblock style %}
 </head>
@@ -29,10 +56,10 @@
     <!-- script of bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-    </script>
+        </script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
         integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous">
-    </script>
+        </script>
 </body>
 
 </html>

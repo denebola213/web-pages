@@ -3,3 +3,5 @@ public/
 zola/
 vendor/
 .solargraph.yml
+
+static/processed_images/
