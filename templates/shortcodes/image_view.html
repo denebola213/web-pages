@@ -14,10 +14,10 @@
     <div id="{{ path_id }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="imagePopupLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
-            <div class="modal-content" style="background-color: #fdf6e3;">
+            <div class="modal-content" style="background-color: #00000030;">
                 <div class="modal-body">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                        <span aria-hidden="true" style="color: #FFFFFF;">&times;</span>
                     </button>
                     {% set full_path = '/' ~ path -%}
                     <img src="{{ full_path }}" class="img-fluid" loading="lazy" style="max-height: 80vh;">
