@@ -10,7 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: 'develop'
 
       - name: dev
-        run: git show --name-only $GITHUB_SHA
+        run: git log --name-only $GITHUB_SHA
 
