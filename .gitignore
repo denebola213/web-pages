@@ -2,6 +2,7 @@ node_modules/
 public/
 zola/
 vendor/
+.bundle/
 .solargraph.yml
 
 static/processed_images/

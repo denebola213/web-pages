@@ -7,8 +7,7 @@
     "bootstrap": "^4.5.3"
   },
   "scripts": {
-    "serve": "./zola/target/release/zola serve"
+    "serve": "./zola/target/release/zola serve",
+    "build": "./zola/target/release/zola build"
   }
-
-  
 }
