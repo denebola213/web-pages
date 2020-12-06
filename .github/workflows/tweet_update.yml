@@ -21,7 +21,7 @@ jobs:
           working-directory: './script/'
 
       - name: tweet
-        run: bundle exec tweet_update.rb
+        run: bundle exec ruby tweet_update.rb
         working-directory: './script'
         env:
           TWITTER_CONSUMER_KEY: ${{ secrets.TWITTER_CONSUMER_KEY }}

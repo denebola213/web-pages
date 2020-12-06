@@ -5,18 +5,18 @@ require 'open-uri'
 def tweet(tweet)
 
   twitter_client = ::Twitter::REST::Client.new do |config|
-    config.consumer_key = env['TWITTER_CONSUMER_KEY']
-    config.consumer_secret = env['TWITTER_CONSUMER_SECRET']
-    config.access_token = env['TWITTER_ACCESS_TOKEN']
-    config.access_token_secret = env['TWITTER_ACCESS_TOKEN_SECRET']
+    config.consumer_key = ENV['TWITTER_CONSUMER_KEY']
+    config.consumer_secret = ENV['TWITTER_CONSUMER_SECRET']
+    config.access_token = ENV['TWITTER_ACCESS_TOKEN']
+    config.access_token_secret = ENV['TWITTER_ACCESS_TOKEN_SECRET']
   end
 
   twitter_client.update(tweet)
 
 end
 
-def get_commit_message(sha: '')
-  uri = URI.parse("https://api.github.com/repos/denebola213/web-pages/git/commits/#{sha}")
+def get_commit_message(api_url: '', sha: '')
+  uri = URI.parse("#{api_url}/repos/denebola213/web-pages/git/commits/#{sha}")
   return JSON.parse(uri.read)
 end
 
@@ -36,7 +36,7 @@ def get_update_url(sha: '')
   return file_list
 end
 
-res = get_commit_message(sha: '619c51c633019112755564c327e0e4c5433d9d56')
+res = get_commit_message(api_url: ENV['GITHUB_API_URL'], sha: ENV['GITHUB_SHA'])
 
 tweet_text = ''
 
@@ -46,8 +46,13 @@ res['message'].scan(/^post\s(.+)$/) do |matched|
   tweet_text << "\n"
 end
 
-get_update_url(sha: '619c51c633019112755564c327e0e4c5433d9d56').each do |path|
-  tweet_text << "#{path}\n"
+if (tweet_text == '')
+  return
+else
+  get_update_url(sha: ENV['GITHUB_SHA']).each do |path|
+    tweet_text << "#{path}\n"
+  end
+  tweet(tweet_text)
 end
 
-tweet(tweet_text)
+
