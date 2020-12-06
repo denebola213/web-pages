@@ -47,11 +47,15 @@ res['message'].scan(/^post\s(.+)$/) do |matched|
 end
 
 if (tweet_text == '')
+  puts 'ページの更新ではありませんでした。'
   return
 else
   get_update_url(sha: ENV['GITHUB_SHA']).each do |path|
     tweet_text << "#{path}\n"
   end
+
+  puts 'ツイートしました。'
+  puts tweet_text
   tweet(tweet_text)
 end
 
