@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: 'develop'
+          ref: 'master'
           fetch-depth: 2
 
       - name: setup ruby

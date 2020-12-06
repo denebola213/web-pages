@@ -22,11 +22,11 @@ end
 
 def get_update_url(sha: '')
 
-  res = `git show --name-only #{sha}`.split(/\n/)
+  out = `git show --name-only #{sha}`.split(/\n/)
 
   file_list = Array.new
-  while (res.size > 6) do
-    tmp_file = res.pop
+  while (out.size > 6) do
+    tmp_file = out.pop
     tmp_file.scan /^content(\/(tech|diary).*)$/ do |file|
       path = file[0].sub(/.md$/, '')
       file_list.push "https://www.st-albireo.net#{path}"
@@ -47,15 +47,15 @@ res['message'].scan(/^post\s(.+)$/) do |matched|
 end
 
 if (tweet_text == '')
-  puts 'ページの更新ではありませんでした。'
+  p 'ページの更新ではありませんでした。'
   return
 else
   get_update_url(sha: ENV['GITHUB_SHA']).each do |path|
     tweet_text << "#{path}\n"
   end
 
-  puts 'ツイートしました。'
-  puts tweet_text
+  p 'ツイートしました。'
+  p tweet_text
   tweet(tweet_text)
 end
 
