@@ -23,7 +23,7 @@ OS:windows10 (CentOS,Raspbian)
 
 **discordでbotを作るためのgem**  ...だけだと味気ないので少々詳しく。  
 discordには、[外部からテキストチャット、ボイスチャットなどにアクセスできるAPI](https://discordapp.com/developers/docs/intro)があります。  
-discordrbはそれらのAPIをrubyらしくいじれるようにしたラッパーです。GitHubのwikiやClassListが充実しているので、初心者でも（英語を）頑張れば使えると思います。  
+discordrbはそれらのAPIをRubyらしくいじれるようにしたラッパーです。GitHubのwikiやClassListが充実しているので、初心者でも（英語を）頑張れば使えると思います。  
 
 ## discordrbのインストール 
 discordrbはgemに登録されているので、かんたんに導入できます。  
