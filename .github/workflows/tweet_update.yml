@@ -18,7 +18,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          working-directory: './script/'
+          working-directory: './scripts/'
 
       - name: tweet
         run: bundle exec ruby tweet_update.rb
