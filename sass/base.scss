@@ -1,13 +1,47 @@
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
-@import "./color.scss";
+
+:root {
+    --solarized-yellow: #b58900;
+    --solarized-orange: #cb4b16;
+    --solarized-red: #dc322f;
+    --solarized-magenta: #d33682;
+    --solarized-violet: #6c71c4;
+    --solarized-blue: #268bd2;
+    --solarized-cyan: #2aa198;
+    --solarized-green: #859900;
+
+    --solarized-base3: #002b36;
+    --solarized-base2: #073642;
+    --solarized-base1: #586e75;
+    --solarized-base0: #657b83;
+    --solarized-base00: #839496;
+    --solarized-base01: #93a1a1;
+    --solarized-base02: #eee8d5;
+    --solarized-base03: #fdf6e3;
+
+    --my-font: "Source Code Pro", "Noto Sans JP", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --solarized-base03: #002b36;
+        --solarized-base02: #073642;
+        --solarized-base01: #586e75;
+        --solarized-base00: #657b83;
+        --solarized-base0: #839496;
+        --solarized-base1: #93a1a1;
+        --solarized-base2: #eee8d5;
+        --solarized-base3: #fdf6e3;
+    }
+}
 
 // font
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&family=Source+Code+Pro&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP&family=Source+Code+Pro&display=swap");
 
 body {
-    background-color: $base03;
-    font-family: 'Source Code Pro', 'Noto Sans JP', sans-serif;
-    color: $base3;
+    background-color: var(--solarized-base03);
+    font-family: var(--my-font);
+    color: var(--solarized-base3);
 
     min-height: 100vh;
     min-width: 100vw;
@@ -17,14 +51,16 @@ body {
 
 a {
     transition: color 0.3s;
-    color: $yellow;
+    color: var(--solarized-yellow);
 }
 
 a:hover {
-    color: $orange;
+    color: var(--solarized-orange);
 }
 
-a:link, a:visited, a:active {
+a:link,
+a:visited,
+a:active {
     text-decoration: none;
 }
 

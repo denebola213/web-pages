@@ -6,7 +6,7 @@ body {
 }
 
 a {
-    color: $base3;
+    color: var(--solarized-base3);
 }
 
 .category * {
@@ -15,7 +15,7 @@ a {
 
 .category:hover {
     * {
-        color: $blue;
+        color: var(--solarized-blue);
     }
     text-decoration: none;
 }
@@ -30,7 +30,7 @@ main {
 
 #title {
     font-size: 2rem;
-    color: $green;
+    color: var(--solarized-green);
     margin-bottom: 2rem;
 }
 

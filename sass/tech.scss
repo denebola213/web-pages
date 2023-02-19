@@ -1,15 +1,16 @@
 @import "section.scss";
 
-section, .child-section {
+section,
+.child-section {
     margin-top: 2rem;
-    margin-left: .5rem;
+    margin-left: 0.5rem;
     padding-left: 1rem;
-    border-left: solid 1px $base00;
+    border-left: solid 1px var(--solarized-base00);
     list-style-image: url(./gear.svg);
 }
 
 .child-section li::marker {
-    fill: $orange
+    fill: var(--solarized-orange);
 }
 
 .tech-page-title {

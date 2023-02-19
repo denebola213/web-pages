@@ -2,16 +2,21 @@
 
 // for Header
 nav {
-    background-color: $base02;
+    background-color: var(--solarized-base02);
 }
 
 #main-header .navbar-brand {
     font-size: 1.5rem;
-    color: $green;
+    color: var(--solarized-green);
 }
 
 #main-header .nav-link {
     margin: 0 0.3rem;
+    color: var(--solarized-base1);
+}
+#main-header .nav-link.active {
+    font-weight: bold;
+    color: var(--solarized-base3);
 }
 
 #page-breadcrumb {
@@ -32,5 +37,5 @@ nav {
 }
 
 #page-breadcrumb * {
-    background-color: $base03;
+    background-color: var(--solarized-base03);
 }

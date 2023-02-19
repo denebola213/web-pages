@@ -19,11 +19,31 @@ main {
 }
 
 .markdown-content {
-    @import "solarized.scss";
+    code {
+        font-family: var(--my-font);
+    }
+
+    h1 {
+        color: var(--solarized-magenta);
+    }
+
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        color: var(--solarized-green);
+    }
+
+    pre {
+        padding: 1em;
+        box-shadow: 1pt 1pt 2pt var(--solarized-base3);
+        border: 1pt solid var(--solarized-base1);
+    }
 }
 
 .date-info {
-    color: $base0;
+    color: var(--solarized-base0);
 }
 
 .line-through {
@@ -33,7 +53,7 @@ main {
 .section-title {
     font-weight: 700;
     font-size: 2.7rem;
-    color: $magenta;
+    color: var(--solarized-magenta);
     margin-bottom: 2.5rem;
 }
 
