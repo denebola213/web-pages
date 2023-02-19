@@ -10,6 +10,10 @@
     --solarized-cyan: #2aa198;
     --solarized-green: #859900;
 
+    --my-font: "Source Code Pro", "Noto Sans JP", sans-serif;
+}
+
+:root {
     --solarized-base3: #002b36;
     --solarized-base2: #073642;
     --solarized-base1: #586e75;
@@ -18,8 +22,17 @@
     --solarized-base01: #93a1a1;
     --solarized-base02: #eee8d5;
     --solarized-base03: #fdf6e3;
+}
 
-    --my-font: "Source Code Pro", "Noto Sans JP", sans-serif;
+:root [theme="dark"] {
+    --solarized-base03: #002b36;
+    --solarized-base02: #073642;
+    --solarized-base01: #586e75;
+    --solarized-base00: #657b83;
+    --solarized-base0: #839496;
+    --solarized-base1: #93a1a1;
+    --solarized-base2: #eee8d5;
+    --solarized-base3: #fdf6e3;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -32,6 +45,16 @@
         --solarized-base1: #93a1a1;
         --solarized-base2: #eee8d5;
         --solarized-base3: #fdf6e3;
+    }
+    :root [theme="light"] {
+        --solarized-base3: #002b36;
+        --solarized-base2: #073642;
+        --solarized-base1: #586e75;
+        --solarized-base0: #657b83;
+        --solarized-base00: #839496;
+        --solarized-base01: #93a1a1;
+        --solarized-base02: #eee8d5;
+        --solarized-base03: #fdf6e3;
     }
 }
 

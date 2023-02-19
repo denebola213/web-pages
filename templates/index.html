@@ -9,6 +9,8 @@
 
     <link rel="icon" href="/favicon.ico">
     <title>denebola213 pages</title>
+
+
 </head>
 
 <body>
@@ -68,6 +70,12 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
         integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous">
         </script>
+
+    <script>
+        // 保存してたテーマを取得
+        const theme = localStorage.getItem("theme");
+        document.body.setAttribute("theme", theme);
+    </script>
 </body>
 
 </html>
