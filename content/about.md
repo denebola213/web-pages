@@ -31,5 +31,6 @@ Lenovo ThinkPad E495
 ## Links
 
 - Twitter: [@denebola213](https://twitter.com/denebola213)
+- Mastodon: [@denebola213@mstdn.nostalgia-tns.net](https://mstdn.nostalgia-tns.net/@denebola213)
 - Github: [denebola213](https://github.com/denebola213)
   - このサイトのリポジトリ: [web-pages](https://github.com/denebola213/web-pages)
