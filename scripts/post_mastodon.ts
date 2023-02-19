@@ -23,7 +23,7 @@ async function post_status(content: string, token: string) {
   const body = new FormData();
   body.append("status", content);
   // DEBUG
-  body.append("visibility", "direct");
+  body.append("visibility", "public");
 
   const request = new Request(url, {
     method: "POST",
