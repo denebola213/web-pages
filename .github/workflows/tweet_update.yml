@@ -41,7 +41,7 @@ jobs:
           deno-version: v1.x
 
       - name: post to mastodon
-        run: deno post_mastodon.ts
+        run: deno run post_mastodon.ts
         working-directory: './scripts'
         env:
           MASTODON_TOKEN: ${{ secrets.MASTODON_TOKEN }}
