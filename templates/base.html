@@ -7,20 +7,20 @@
 
     <link rel="stylesheet" type="text/css" href="/section.css">
     <link rel="icon" href="/favicon.ico">
-    <title>{% block title %} {% endblock title %} - studio_albireo</title>
+    <title>{% block title %} {% endblock title %} - denebola213_pages</title>
 
 
     {% if page.title %}
     <meta name="og:url" content="{{ config.base_url }}{{ page.path }}">
-    <meta name="og:title" content="{{ page.title }} - studio_albireo">
+    <meta name="og:title" content="{{ page.title }} - denebola213_pages">
     <meta name="og:type" content="website">
     {% elif section.title %}
     <meta name="og:url" content="{{ config.base_url }}{{ section.path }}">
-    <meta name="og:title" content="{{ section.title }} - studio_albireo">
+    <meta name="og:title" content="{{ section.title }} - denebola213_pages">
     <meta name="og:type" content="article">
     {% else %}
     <meta name="og:url" content="{{ config.base_url }}">
-    <meta name="og:title" content="studio_albireo">
+    <meta name="og:title" content="denebola213_pages">
     <meta name="og:type" content="website">
     {% endif %}
 
