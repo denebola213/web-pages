@@ -91,8 +91,8 @@ const match_result = commit_message.message.match(/^post\s(.+)$/);
 let status_text = "";
 
 if (match_result && match_result.length >= 2) {
-  status_text += commit_message.date + " サイトが更新されました。\n";
-  status_text += `  > ${match_result[1]}\n\n`;
+  status_text += /*commit_message.date + */ "サイトが更新されました。\n";
+  status_text += `  # ${match_result[1]}\n\n`;
 
   (await get_update_url(GITHUB_SHA)).forEach((url) => {
     status_text += url + "\n";
