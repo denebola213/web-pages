@@ -20,9 +20,19 @@
         d="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1H2zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
 </svg>
 {% for tag in page.taxonomies['tags'] %}
-<span><a href="{{ get_taxonomy_url(kind="tags", name=tag) | safe }}">#{{ tag }}</a></span>
+<span><a href="{{ get_taxonomy_url(kind='tags', name=tag) | safe }}">#{{ tag }}</a></span>
 {% endfor %}
 {% endmacro print_tags %}
+
+{% macro view_image(src, title='') %}
+<p>
+    {% if title != '' %}
+    <span>{{title}}</span>
+    {% endif %}
+    {% set image = resize_image(path=src, width=360, height=360) %}
+    <img src="{{ image.url }}" class="img-thumbnail" />
+</p>
+{% endmacro view_image %}
 
 {% macro print_diary_item(page) %}
 <h2>
@@ -34,9 +44,7 @@
 </p>
 
 {% if page.extra.thumbnail %}
-<p>
-    <img src='{{ resize_image(path=page.extra.thumbnail, width=360, height=360, op="fit") }}' class="img-thumbnail" />
-</p>
+{{ self::view_image(src=page.extra.thumbnail) }}
 {% endif %}
 
 {% if page.summary %}

@@ -96,3 +96,23 @@ footer {
     margin: 1rem;
     text-align: center;
 }
+
+.image-view {
+    text-align: center;
+}
+
+.image-view .image-view-title {
+    color: var(--solarized-base3);
+}
+
+.image-view .modal-content {
+    background-color: var(--solarized-base03);
+}
+
+.image-view .modal-content button span {
+    color: var(--solarized-base3);
+}
+
+.image-view .modal-content img {
+    max-height: 80vh;
+}

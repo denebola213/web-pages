@@ -1,26 +1,30 @@
-<div style="text-align: center;">
+<div class="image-view">
 
     {% set path_id = path | replace(from="/", to="-") -%}
     {% set path_id = path_id | replace(from=".", to="-") -%}
+    {% set path_label_id = path_id ~ '-label' -%}
     {% set path_id_target = '#' ~ path_id -%}
-
-    <button type="button" class="btn" data-toggle="modal" data-target="{{ path_id_target }}">
-        <img src='{{ resize_image(path=path, width=720, height=720, op="fit") }}' class="img-fluid" />
+    {% set image = resize_image(path=path, width=720, height=720, op="fit") %}
+    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="{{ path_id_target }}">
+        <img src='{{ image.url }}' class="img-fluid" />
         {% if title != "" %}
         <br />
-        <span style="color: #fdf6e3;">{{ title }}</span>
+        <span class="image-view-title">{{ title }}</span>
         {% endif %}
     </button>
-    <div id="{{ path_id }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="imagePopupLabel"
+    <div id="{{ path_id }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="{{ path_label_id }}"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
-            <div class="modal-content" style="background-color: #00000060;">
-                <div class="modal-body">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true" style="color: #FFFFFF;">&times;</span>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="{{ path_label_id }}">{{ title }}</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
                     </button>
+                </div>
+                <div class="modal-body">
                     {% set full_path = '/' ~ path -%}
-                    <img src="{{ full_path }}" class="img-fluid" loading="lazy" style="max-height: 80vh;">
+                    <img src="{{ full_path }}" class="img-fluid" loading="lazy">
                 </div>
             </div>
         </div>
