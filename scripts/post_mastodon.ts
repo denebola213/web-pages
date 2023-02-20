@@ -46,15 +46,10 @@ async function post_status(content: string, token: string) {
     });
 }
 
-type CommitMessage = {
-  message: string;
-  date: string;
-};
-
 function get_commit_message(
   endpoint: string,
   sha: string,
-): Promise<CommitMessage> {
+): Promise<string> {
   const url = new URL(
     `${endpoint}/repos/denebola213/web-pages/git/commits/${sha}`,
     import.meta.url,
@@ -62,10 +57,7 @@ function get_commit_message(
   return fetch(url)
     .then((res) => res.json())
     .then((json) => {
-      return {
-        message: json.message,
-        date: json.author.date,
-      };
+      return json.message;
     });
 }
 
@@ -86,12 +78,12 @@ async function get_update_url(sha: string) {
 }
 
 const commit_message = await get_commit_message(GITHUB_API_URL, GITHUB_SHA);
-const match_result = commit_message.message.match(/^post\s(.+)$/);
+const match_result = commit_message.match(/^post\s(.+)$/);
 
 let status_text = "";
 
 if (match_result && match_result.length >= 2) {
-  status_text += /*commit_message.date + */ "サイトが更新されました。\n";
+  status_text += /*commit_message.date + */ "投稿しました。\n";
   status_text += `  # ${match_result[1]}\n\n`;
 
   (await get_update_url(GITHUB_SHA)).forEach((url) => {
