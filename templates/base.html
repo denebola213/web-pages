@@ -27,8 +27,10 @@
     {% endif %}
 
     {% if page.summary %}
+    <meta name='description' content="{{ page.summary | safe }}">
     <meta name="og:description" content="{{ page.summary | safe }}">
     {% else %}
+    <meta name='description' content="debebola's web pages.">
     <meta name="og:description" content="debebola's web pages.">
     {% endif %}
 
