@@ -33,17 +33,14 @@ async function post_status(content: string, token: string) {
     },
   });
 
-  return fetch(request)
-    .then((response) => {
-      if (!response.ok) {
-        const message =
-          `failed to post. status:${response.status} ${response.statusText}`;
-        throw new Error(message);
-      } else {
-        console.log(`posted status.`);
-        return;
-      }
-    });
+  const response = await fetch(request);
+  if (!response.ok) {
+    const message = `failed to post. status:${response.status} ${response.statusText}`;
+    throw new Error(message);
+  } else {
+    console.log(`posted status.`);
+    return;
+  }
 }
 
 function get_commit_message(
@@ -62,16 +59,17 @@ function get_commit_message(
 }
 
 async function get_update_url(sha: string) {
-  const p = Deno.run({
-    cmd: ["git", "show", "--name-only", sha],
-    stdout: "piped",
+  const command = new Deno.Command("git", {
+    args: ["show", "--name-only", sha]
   });
-  const out = await p.output();
-  const out_list = new TextDecoder().decode(out).split(/\n/);
+  const { stdout } = await command.output();
+
+  const out_list = new TextDecoder().decode(stdout).split(/\n/);
   const url_list = out_list
-    .map((o) => [...o.matchAll(/content(\/(tech|diary).*)\./g)].flat())
+    .map((o) => [...o.matchAll(/content(\/(?:tech|diary).*)\./g)].flat())
     .filter((mat) => mat.length >= 3)
     .map((mat) => mat[1])
+    .filter((file) => /\/[^_].*?$/.test(file))
     .map((file) => "https://www.st-albireo.net" + file);
 
   return url_list;
@@ -90,7 +88,7 @@ if (match_result && match_result.length >= 2) {
     status_text += url + "\n";
   });
 
-  post_status(status_text, MASTODON_TOKEN);
+  await post_status(status_text, MASTODON_TOKEN);
   console.log("投稿しました。");
   console.log(status_text);
 } else {
