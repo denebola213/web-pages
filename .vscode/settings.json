@@ -10,5 +10,6 @@
             "useBundler": true // enable reek via bundler
         }
     },
-    "ruby.format": "rubocop" // use rubocop for formatting
+    "ruby.format": "rubocop",
+    "deno.enable": true // use rubocop for formatting
 }
