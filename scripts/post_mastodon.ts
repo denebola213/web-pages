@@ -1,3 +1,9 @@
+
+if (Deno.env.get("DENO_ENV") === "development") {
+  const { load } = await import("@std/dotenv");
+  await load({ export: true });
+}
+
 // read TOKEN
 const MASTODON_TOKEN = Deno.env.get("MASTODON_TOKEN");
 if (typeof MASTODON_TOKEN === "undefined") {
@@ -67,16 +73,22 @@ async function get_update_url(sha: string) {
   const out_list = new TextDecoder().decode(stdout).split(/\n/);
   const url_list = out_list
     .map((o) => [...o.matchAll(/content(\/(?:tech|diary).*)\./g)].flat())
-    .filter((mat) => mat.length >= 3)
+    .filter((mat) => mat.length >= 2)
     .map((mat) => mat[1])
     .filter((file) => /\/[^_].*?$/.test(file))
+    .map((file) => file.replace(/_/g, '-'))
     .map((file) => "https://www.st-albireo.net" + file);
 
   return url_list;
 }
 
 const commit_message = await get_commit_message(GITHUB_API_URL, GITHUB_SHA);
-const match_result = commit_message.match(/^post\s(.+)$/);
+
+console.log(`commit_message: ${commit_message}`);
+
+const match_result = commit_message.match(/post\s(.+)/);
+
+console.log(`match_result: ${match_result}`);
 
 let status_text = "";
 
