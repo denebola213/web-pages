@@ -6,21 +6,20 @@ on:
       - master
 
 jobs:
-
   mastodon:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: 'master'
+          ref: "master"
           fetch-depth: 2
 
       - uses: denoland/setup-deno@v1
         with:
-          deno-version: v1.x
+          deno-version: v2.x
 
       - name: post to mastodon
         run: deno run --allow-env --allow-net --allow-run post_mastodon.ts
-        working-directory: './scripts'
+        working-directory: "./scripts"
         env:
           MASTODON_TOKEN: ${{ secrets.MASTODON_TOKEN }}
