@@ -1,6 +1,6 @@
 +++
 title = "Raspberry Pi 4B に indi-server をインストール"
-date = 2026-05-29
+date = 2026-05-30
 
 [taxonomies]
 tags = ["astronomy", "kstars"]
@@ -50,6 +50,8 @@ graph LR
 	RPi <-->|"USB"| GEM28["iOptron GEM28<br/>(赤道儀)"]
 	Ceres -->|"ST4"| GEM28
 {% end %}
+
+{{ image_view(path="image/indiserver02.png", title='この構成での撮影風景') }}
 
 ## インストール
 
