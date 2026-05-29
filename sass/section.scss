@@ -6,13 +6,13 @@ main {
     margin: 0 auto;
 }
 
-@include media-breakpoint-up(sm) {
+@media (min-width: 576px) {
     main {
         width: 70%;
     }
 }
 
-@include media-breakpoint-up(md) {
+@media (min-width: 768px) {
     main {
         width: 50%;
     }
