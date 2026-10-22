@@ -1,0 +1,45 @@
+name: ci
+
+# デプロイは Cloudflare Workers Builds が行う。ここはマージ前の関門だけ。
+# pull_request で必ず走らせ、ブランチ保護で必須チェックに指定する。
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# 同じ PR に連続 push したら古い実行は打ち切る
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # packageManager フィールドの pnpm 12.14.0 を使う。setup-node より先に置くこと
+      # （cache: pnpm が pnpm の存在を前提にするため）。
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # Cloudflare のビルドイメージ（既定 24.18.0）に合わせる。
+          # ローカル検証と本番ビルドの Node 差分で見逃しが出ないようにする。
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # dist/ を作る。check-redirects は dist/_redirects を読むため build が先。
+      - run: pnpm build
+
+      - name: 検査（URL 互換 / タイトル / Markdown / タグ / 301 / コントラスト）
+        run: pnpm check
+
+      # 設定ミス（assets のパス誤り・wrangler.jsonc の破損）をマージ前に検出する。
+      # アップロードはしない。
+      - name: wrangler 設定の検証
+        run: pnpm dlx wrangler@4.151.3 deploy --dry-run

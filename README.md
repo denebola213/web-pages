@@ -19,7 +19,7 @@ pnpm build    # dist/ へ静的出力
 pnpm check    # URL・タイトル・Markdown・タグ・リダイレクト・コントラストの検査
 ```
 
-`pnpm check` は CI でも同じものを回す。デプロイ前に必ず通すこと。
+`pnpm check` は GitHub Actions（`ci.yml`）でも同じものを回す。`pull_request` で走るので、マージ前に必ず緑にする（ブランチ保護で `ci / check` を必須にしておくと確実）。
 
 パッケージマネージャは **pnpm**（`package.json` の `packageManager` でバージョン固定）。`package-lock.json` は持たない。
 
@@ -127,7 +127,9 @@ Workers & Pages → `st-albireo` → Settings → Builds で次を設定する�
 - Node はビルドイメージ既定の 24 系（`engines.node: ">=22.22.0"` を満たす）
 - wrangler は devDependency に入れていない。`workerd` を含むとローカルの `node_modules` が数百 MB 増えるため、**deploy コマンド側でバージョンを固定**している。更新時はここを書き換える
 - 検査（`pnpm check`）がビルドコマンドに含まれるので、落ちればデプロイされない
-- `master` 以外のブランチは Worker Previews になる（`wrangler preview` を呼ぶ必要がある。既定は `npx wrangler preview`）。プレビューが不要なら Settings → Build → Branch control の **Enable Preview Builds** を外す
+- **プレビューを使う**: Settings → Build → Branch control で **Enable Preview Builds** を有効にする。`master` 以外のブランチ（例: `astro-rewrite`）へ push するとビルド後にプレビュー URL が発行され、PR にコメントが付く（GitHub 連携の権限が必要）
+- プレビューは `WORKERS_CI_BRANCH` が `master` 以外のとき `<meta name="robots" content="noindex, nofollow">` を出力し、`canonical` は本番 URL（`https://www.st-albireo.net/...`）を指す。検索結果に重複して載らないようにするため
+- プレビューが不要なら **Enable Preview Builds** を外す（その場合 Preview command は使われない）
 - Worker 名・アセット設定は `wrangler.jsonc`（`name: st-albireo`、`assets.directory: ./dist`、`html_handling: auto-trailing-slash`、`not_found_handling: 404-page`）
 
 `public/_redirects` は Cloudflare の静的アセットが解釈する。**`astro dev` では効かない**ので、301 の確認は `pnpm dlx wrangler dev` で行う。

@@ -11,5 +11,8 @@
   },
   "observability": {
     "enabled": true
-  }
+  },
+  // Workers Previews（`wrangler preview`）は previews ブロックが必須。空でよい。
+  // アセット・互換性設定・placement はトップレベルのまま（ここへ移さない）。
+  "previews": {}
 }
