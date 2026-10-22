@@ -65,6 +65,11 @@ for (const f of await walk(ROOT.pathname)) {
   if (hs.length === 0) problems.push(`${rel}: 本文に H1 がない（タイトルの出所）`);
   if (hs.length > 1) problems.push(`${rel}: 本文 H1 が ${hs.length} 個ある（1 つにする）`);
   if (hs.length === 1 && !hs[0]) problems.push(`${rel}: H1 が空`);
+
+  // 日記は URL に /diary/ があるためタグを持たない（docs のみタグを使う）
+  if (rel.startsWith('diary/') && /^tags:/m.test(fm)) {
+    problems.push(`${rel}: 日記にタグは付けない（タグは docs 専用）`);
+  }
 }
 
 if (problems.length) {

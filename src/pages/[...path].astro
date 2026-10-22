@@ -114,7 +114,6 @@ const hasMeta = Boolean(entry.data.date) || entry.data.tags.length > 0;
                   <a class="page-title" href={`/${p.id}/`}>{titleOf(p)}</a>
                   <div class="date-info">
                     <time datetime={fmt(p.data.date)}>{fmt(p.data.date).slice(5)}</time>
-                    <TagList tags={p.data.tags} slugOf={slugOf} />
                   </div>
                 </li>
               ))}
