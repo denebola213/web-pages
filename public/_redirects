@@ -10,10 +10,8 @@
 /tech/             /docs/                 301
 /tech/*            /docs/:splat           301
 
-# 日記のタグ廃止に伴い消えたタグページ。
-/tags/other/       /tags/                 301
+# 日記の「日記」タグ廃止に伴い消えたタグページ。
 /tags/ri-ji/       /tags/                 301
-/tags/tech-other/  /tags/                 301
 
 # 空だった画像インデックスのみ削除。/image/*.jpg は実体なので転送しない。
 /image/            /                      301

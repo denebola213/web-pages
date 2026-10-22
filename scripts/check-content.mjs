@@ -73,9 +73,9 @@ for (const f of await walk(ROOT.pathname)) {
     problems.push(`${rel}: updated (${u}) が date (${d}) より前`);
   }
 
-  // 日記は URL に /diary/ があるためタグを持たない（docs のみタグを使う）
-  if (rel.startsWith('diary/') && /^tags:/m.test(fm)) {
-    problems.push(`${rel}: 日記にタグは付けない（タグは docs 専用）`);
+  // 日記にタグは使えるが「日記」だけは禁止（URL に /diary/ があるため冗長）
+  if (rel.startsWith('diary/') && /^\s*-\s*["']?日記["']?\s*$/m.test(fm)) {
+    problems.push(`${rel}: 日記に「日記」タグは付けない（URL に /diary/ がある）`);
   }
 }
 
