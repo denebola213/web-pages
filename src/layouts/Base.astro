@@ -9,9 +9,10 @@ interface Props {
   description?: string;
   ogTitle?: string;
   crumbs?: Crumb[];
+  wide?: boolean;
 }
 
-const { title, description = "denebola213's web pages", ogTitle, crumbs } = Astro.props;
+const { title, description = "denebola213's web pages", ogTitle, crumbs, wide = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const pageTitle = title ? `${title} - denebola213 pages` : 'denebola213 pages';
 ---
@@ -33,7 +34,7 @@ const pageTitle = title ? `${title} - denebola213 pages` : 'denebola213 pages';
     <title>{pageTitle}</title>
   </head>
   <body>
-    <main class="main">
+    <main class:list={['main', { wide }]}>
       {crumbs && <Breadcrumbs items={crumbs} />}
       <slot />
     </main>
