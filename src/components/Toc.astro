@@ -1,0 +1,39 @@
+---
+interface Heading { depth: number; slug: string; text: string }
+interface Props { headings: Heading[] }
+
+const { headings } = Astro.props;
+
+// h2 と h3 だけを目次にする（h1 はページタイトル、h4 以下は細かすぎる）
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+
+// h2 ごとに、続く h3 を子としてまとめる
+const groups: { text: string; slug: string; children: Heading[] }[] = [];
+for (const h of items) {
+  if (h.depth === 2 || groups.length === 0) {
+    groups.push({ text: h.text, slug: h.slug, children: [] });
+  } else {
+    groups[groups.length - 1].children.push(h);
+  }
+}
+---
+
+{groups.length > 0 && (
+  <details class="toc" open>
+    <summary>目次</summary>
+    <ol class="toc-list">
+      {groups.map((g) => (
+        <li>
+          <a href={`#${g.slug}`}>{g.text}</a>
+          {g.children.length > 0 && (
+            <ol class="toc-sub">
+              {g.children.map((c) => (
+                <li><a href={`#${c.slug}`}>{c.text}</a></li>
+              ))}
+            </ol>
+          )}
+        </li>
+      ))}
+    </ol>
+  </details>
+)}

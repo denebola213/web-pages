@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import DocsTree from '../components/DocsTree.astro';
 import TagList from '../components/TagList.astro';
+import Toc from '../components/Toc.astro';
 import { tagSlug } from '../lib/slug.mjs';
 import { titleOf } from '../lib/title.mjs';
 import tagSlugs from '../data/tag-slugs.json';
@@ -13,7 +14,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
 const all = await getCollection('pages');
 const slugOf = (name: string) => tagSlug(name, tagSlugs as Record<string, string>);
 
@@ -91,6 +92,7 @@ const hasMeta = Boolean(entry.data.date) || entry.data.tags.length > 0;
           <TagList tags={entry.data.tags} slugOf={slugOf} />
         </p>
       )}
+      <Toc headings={headings} />
       <div class="markdown-content"><div id="content"><Content /></div></div>
       {childNodes.length > 0 && <DocsTree nodes={childNodes} current={entry.id} />}
     </article>
@@ -98,6 +100,7 @@ const hasMeta = Boolean(entry.data.date) || entry.data.tags.length > 0;
     <>
       <article>
         <h1>{title}</h1>
+        <Toc headings={headings} />
         <div class="markdown-content"><Content /></div>
       </article>
       {years.map((y) => (
@@ -128,6 +131,7 @@ const hasMeta = Boolean(entry.data.date) || entry.data.tags.length > 0;
           <TagList tags={entry.data.tags} slugOf={slugOf} />
         </p>
       )}
+      <Toc headings={headings} />
       <div class="markdown-content"><div id="content"><Content /></div></div>
     </article>
   )}
