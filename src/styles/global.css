@@ -286,9 +286,25 @@ hr {
 .markdown-content h2 { margin-top: 2.75rem; }
 
 .markdown-content img {
+  display: block;
   max-width: 100%;
+  /* 縦長のスクリーンショットが画面を占有しないよう高さを抑える（比率は保つ） */
+  max-height: min(60vh, 42rem);
+  width: auto;
   height: auto;
+  margin: 0 auto;
   border-radius: var(--radius-4);
+}
+
+/* 画像 + キャプション（ビルド時に figure 化） */
+.markdown-content figure { margin: 1.75rem 0; }
+
+.markdown-content figcaption {
+  margin-top: 0.55rem;
+  color: var(--color-text-sub);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  text-align: center;
 }
 
 .markdown-content pre {
