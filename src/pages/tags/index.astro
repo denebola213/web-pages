@@ -13,7 +13,7 @@ const terms = [...new Set(posts.flatMap((p) => p.data.tags))]
   .sort((a, b) => a.slug.localeCompare(b.slug));
 ---
 
-<Base title="タグ" crumbs={[{ label: 'タグ' }]}>
+<Base title="タグ">
   <h1>タグ</h1>
   <ul class="tag-index">
     {terms.map((t) => <li><a href={`/tags/${t.slug}/`}>#{t.name}</a> <span class="count">{t.count}</span></li>)}

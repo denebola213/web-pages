@@ -21,7 +21,7 @@ const slugOf = (name: string) => tagSlug(name, tagSlugs as Record<string, string
 const fmt = (d?: Date) => (d ? d.toISOString().slice(0, 10) : '');
 const body = entry.body ?? '';
 const needsMermaid = body.includes('```mermaid');
-const description = entry.data.description ?? "denebola213's web pages";
+const description = entry.data.description ?? "denebola213_pages — 技術メモと日記";
 
 const isDocs = entry.id === 'docs' || entry.id.startsWith('docs/');
 const isDiary = entry.id === 'diary' || entry.id.startsWith('diary/');
@@ -33,16 +33,17 @@ const title = titleOf(entry);
 /* ---- パンくず ---- */
 const trail = entry.id.split('/');
 const crumbs: { href?: string; label: string }[] = [];
+// ルート（/docs/ や /diary/）はサイト名リンクが先祖の役割を果たすため空のまま
 if (isDocs) {
-  crumbs.push(trail.length === 1 ? { label: 'ドキュメント' } : { href: '/docs/', label: 'ドキュメント' });
+  // セクション直下（/docs/）はサイト名が先祖なので、パンくずは積まない
+  if (trail.length > 1) crumbs.push({ href: '/docs/', label: 'ドキュメント' });
   for (let i = 1; i < trail.length; i++) {
     const id = trail.slice(0, i + 1).join('/');
     const last = i === trail.length - 1;
     crumbs.push(last ? { label: title } : { href: `/${id}/`, label: labelOf(id) });
   }
 } else if (isDiary) {
-  if (trail.length === 1) crumbs.push({ label: '日記' });
-  else crumbs.push({ href: '/diary/', label: '日記' }, { label: fmt(entry.data.date) });
+  if (trail.length > 1) crumbs.push({ href: '/diary/', label: '日記' }, { label: fmt(entry.data.date) });
 } else {
   crumbs.push({ label: title });
 }

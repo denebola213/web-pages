@@ -3,11 +3,11 @@ interface Item { href?: string; label: string; }
 interface Props { items: Item[]; }
 const { items } = Astro.props;
 ---
+{/* 先頭の「ホーム」はサイト名リンク（Base.astro）が担うので、ここでは繰り返さない */}
 <nav class="crumbs" aria-label="パンくず">
-  <a href="/">ホーム</a>
-  {items.map((it) => (
+  {items.map((it, i) => (
     <>
-      <span class="sep" aria-hidden="true">/</span>
+      {i > 0 && <span class="sep" aria-hidden="true">/</span>}
       {it.href
         ? <a href={it.href}>{it.label}</a>
         : <span aria-current="page">{it.label}</span>}

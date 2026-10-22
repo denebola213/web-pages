@@ -40,6 +40,7 @@ a:hover {
 a:visited { color: var(--color-link-visited); }
 
 /* ナビゲーション・一覧では訪問色を抑制する */
+.site-name:visited,
 .crumbs a:visited,
 .page-list a:visited,
 .docs-tree a:visited,
@@ -57,6 +58,25 @@ a:visited { color: var(--color-link-visited); }
   padding: 0 1.25rem 5rem;
 }
 
+
+/* =========================================================
+   ページ上部: サイト名 + パンくず
+   ========================================================= */
+.page-head { padding: 1.5rem 0 0; }
+
+.site-name {
+  display: inline-block;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--color-text-sub);
+  text-decoration: none;
+}
+
+.site-name:hover { color: var(--color-primary); text-decoration: underline; }
+
+/* サイト名の下ではパンくずの上余白を詰める */
+.page-head .crumbs { padding: 0.4rem 0 0; }
 
 /* =========================================================
    パンくず
