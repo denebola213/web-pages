@@ -350,8 +350,7 @@ pre.mermaid {
   margin: 2.5rem 0 0;
 }
 
-.home-links li { margin: 0; border-bottom: 1px solid var(--color-border); }
-.home-links li:first-child { border-top: 1px solid var(--color-border); }
+.home-links li { margin: 0; }
 
 .home-links a {
   display: flex;
