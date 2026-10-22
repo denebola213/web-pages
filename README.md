@@ -125,7 +125,7 @@ Workers & Pages → `st-albireo` → Settings → Builds で次を設定する�
 
 - **API トークンは不要**。Cloudflare がビルド用トークンを自動生成する（GitHub Secrets の `CLOUDFLARE_API_TOKEN` は使わない）
 - ビルドイメージの pnpm は既定 10.11.1。このリポジトリは `engines.pnpm: ">=12"` 前提なので `PNPM_VERSION` で 12.14.0 に固定する
-- Node はビルドイメージ既定の 24 系（`engines.node: ">=22.22.0"` を満たす）
+- Node はビルドイメージ既定の 24 系に揃える（`engines.node: ">=24.0.0"`）。スクリプトの `.ts` は Node の型剥がしで直接動くので、tsx / ts-node は入れていない
 - wrangler は devDependency に入れていない。`workerd` を含むとローカルの `node_modules` が数百 MB 増えるため、**deploy コマンド側でバージョンを固定**している。更新時はここを書き換える
 - 検査（`pnpm check`）がビルドコマンドに含まれるので、落ちればデプロイされない
 - **プレビューを使う**: Settings → Build → Branch control で **Enable Preview Builds** を有効にする。`master` 以外のブランチ（例: `astro-rewrite`）へ push するとビルド後にプレビュー URL が発行され、PR にコメントが付く（GitHub 連携の権限が必要）
