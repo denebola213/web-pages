@@ -182,6 +182,8 @@ hr {
 
 .page-title:hover { text-decoration: underline; }
 
+.date-info .updated { color: var(--color-text-sub); }
+
 .page-list .date-info { margin-top: 0.2rem; }
 
 /* docs 索引の記事一覧（セクション名は補助情報として小さく添える） */

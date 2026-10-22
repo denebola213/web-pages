@@ -66,6 +66,13 @@ for (const f of await walk(ROOT.pathname)) {
   if (hs.length > 1) problems.push(`${rel}: 本文 H1 が ${hs.length} 個ある（1 つにする）`);
   if (hs.length === 1 && !hs[0]) problems.push(`${rel}: H1 が空`);
 
+  // updated は公開日以降であること（逆転は入力ミス）
+  const d = fm.match(/^date:\s*(\S+)/m)?.[1];
+  const u = fm.match(/^updated:\s*(\S+)/m)?.[1];
+  if (d && u && Date.parse(u) < Date.parse(d)) {
+    problems.push(`${rel}: updated (${u}) が date (${d}) より前`);
+  }
+
   // 日記は URL に /diary/ があるためタグを持たない（docs のみタグを使う）
   if (rel.startsWith('diary/') && /^tags:/m.test(fm)) {
     problems.push(`${rel}: 日記にタグは付けない（タグは docs 専用）`);

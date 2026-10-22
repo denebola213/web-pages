@@ -79,7 +79,10 @@ const diaryPosts = all
   .sort((a, b) => (b.data.date as Date).valueOf() - (a.data.date as Date).valueOf());
 const years = [...new Set(diaryPosts.map((p) => (p.data.date as Date).getUTCFullYear()))];
 
-const hasMeta = Boolean(entry.data.date) || entry.data.tags.length > 0;
+const updated = entry.data.updated;
+// 公開日と同じ日付なら「更新」は出さない
+const showUpdated = Boolean(updated) && fmt(updated) !== fmt(entry.data.date);
+const hasMeta = Boolean(entry.data.date) || showUpdated || entry.data.tags.length > 0;
 ---
 
 <Base title={title} description={description} crumbs={crumbs}>
@@ -89,6 +92,7 @@ const hasMeta = Boolean(entry.data.date) || entry.data.tags.length > 0;
       {hasMeta && (
         <p class="date-info">
           {entry.data.date && <time datetime={fmt(entry.data.date)}>{fmt(entry.data.date)}</time>}
+          {showUpdated && <span class="updated">更新: <time datetime={fmt(updated)}>{fmt(updated)}</time></span>}
           <TagList tags={entry.data.tags} slugOf={slugOf} />
         </p>
       )}
@@ -127,6 +131,7 @@ const hasMeta = Boolean(entry.data.date) || entry.data.tags.length > 0;
       {hasMeta && (
         <p class="date-info">
           {entry.data.date && <time datetime={fmt(entry.data.date)}>{fmt(entry.data.date)}</time>}
+          {showUpdated && <span class="updated">更新: <time datetime={fmt(updated)}>{fmt(updated)}</time></span>}
           <TagList tags={entry.data.tags} slugOf={slugOf} />
         </p>
       )}
