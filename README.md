@@ -1,43 +1,41 @@
-# Astro Starter Kit: Minimal
+# denebola213_pages
+
+https://www.st-albireo.net のソース。Astro による完全静的サイト（クライアント JS は mermaid のページのみ）。
+
+## 構成
+
+| パス | 内容 |
+|---|---|
+| `/diary/` | 日付順の記事。URL は `/diary/YYYYMMDD/` で年ごとに割らない |
+| `/docs/` | 技術ドキュメント。階層ツリーで辿る |
+| `/tags/` | タグ別の一覧 |
+| `/docs/about/` | 自己紹介 |
+
+## 開発
 
 ```sh
-npm create astro@latest -- --template minimal
+npm ci
+npm run dev      # http://localhost:4321
+npm run build    # dist/ へ静的出力
+npm run check    # URL・タイトル・Markdown・タグ・リダイレクト・コントラストの検査
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+`npm run check` は CI でも同じものを回す。デプロイ前に必ず通すこと。
 
-## 🚀 Project Structure
+## コンテンツ
 
-Inside of your Astro project, you'll see the following folders and files:
+記事は `src/content/pages/{diary,docs}/` に Markdown で置く。
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+- タイトルは**本文の `# 見出し`**。frontmatter に `title` は書かない
+- 画像は `public/image/`、本文からは `/image/foo.jpg` で参照（alt 必須）
+- 詳しい規約と落とし穴は [AGENTS.md](AGENTS.md)
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## デプロイ
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+本番は Netlify（`netlify.toml`）。`public/_redirects` は Netlify と Cloudflare Workers の双方が解釈するが、**`astro dev` では効かない**ので 301 の確認は `npx wrangler dev` かプレビュー環境で行う。
 
-Any static assets, like images, can be placed in the `public/` directory.
+Cloudflare Workers へ移す場合の設定（`wrangler.jsonc`、`.github/workflows/deploy.yml`）も同梱してある。併用すると二重デプロイになるため、どちらか一方に決めて他方を外すこと。
 
-## 🧞 Commands
+## ライセンス
 
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+記事本文の著作権は著者に帰属する。`public/vendor/mermaid.min.js` は mermaid（MIT、同ディレクトリの `mermaid.LICENSE.txt`）。
