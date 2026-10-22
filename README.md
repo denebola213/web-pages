@@ -115,6 +115,23 @@ Cloudflare Workers（静的アセット）へ GitHub Actions でデプロイす�
 
 `public/_redirects` は Cloudflare の静的アセットが解釈する。**`astro dev` では効かない**ので、301 の確認は `pnpm dlx wrangler dev` で行う。
 
+## Mastodon への投稿
+
+`master` に**記事を追加**すると、`.github/workflows/mastodon.yml` が `scripts/post-mastodon.mjs` を実行し、記事名と URL を 1 記事 1 投稿で流す。
+
+- 対象は `src/content/pages/{docs,diary}/**.md` のうち、その push で**追加**されたもの（`git diff --diff-filter=A`）。修正・リネームでは投稿しない
+- `index.md`（セクション索引）と `draft: true` は除外
+- タイトルと URL はサイト本体と同じ `src/lib/title.mjs` / `src/lib/slug.mjs` から取る
+- 記事 URL が 200 を返すまで最大 5 分待ってから投稿する（deploy 完了待ち。`LIVE_TIMEOUT_MS` で変更、`SKIP_LIVE_CHECK=1` で無効化）
+- 同じコミットの再実行は `Idempotency-Key` で重複投稿にならない（Mastodon 側のキャッシュが切れた後の再実行は重複し得る）
+- ローカル確認は投稿せず本文だけ出す:
+
+  ```sh
+  DRY_RUN=1 BEFORE_SHA=HEAD^ GITHUB_SHA=HEAD pnpm run post:mastodon
+  ```
+
+必要なシークレットは `MASTODON_TOKEN`（`write:statuses` 権限）。投稿先は既定 `mstdn.nostalgia-tns.net`（`MASTODON_INSTANCE` で変更可）。
+
 ## ライセンス
 
 - **コード**（`src/**` のうちコンテンツ以外、`scripts/**`、設定ファイル）: [MIT](LICENSE)

@@ -20,7 +20,8 @@
     "check:content": "node scripts/check-content.mjs",
     "lint:md": "markdownlint-cli2",
     "check:contrast": "node scripts/check-contrast.mjs",
-    "check:redirects": "node scripts/check-redirects.mjs"
+    "check:redirects": "node scripts/check-redirects.mjs",
+    "post:mastodon": "node scripts/post-mastodon.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-satteri": "^0.4.4",
