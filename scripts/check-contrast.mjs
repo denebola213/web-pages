@@ -38,6 +38,7 @@ function ratio(a, b) {
 /** [説明, 前景トークン, 背景トークン, 必要比] */
 const checks = [
   ['本文テキスト', 'color-text', 'color-bg', 4.5],
+  ['コード面の本文', 'color-text', 'color-code-bg', 4.5],
   ['補助テキスト', 'color-text-sub', 'color-bg', 4.5],
   ['本文リンク', 'color-link', 'color-bg', 4.5],
   ['訪問済みリンク', 'color-link-visited', 'color-bg', 4.5],
