@@ -40,4 +40,10 @@ Cloudflare Workers（静的アセット）へ GitHub Actions でデプロイす�
 
 ## ライセンス
 
-記事本文の著作権は著者に帰属する。`public/vendor/mermaid.min.js` は mermaid（MIT、同ディレクトリの `mermaid.LICENSE.txt`）。
+- **コード**（`src/**` のうちコンテンツ以外、`scripts/**`、設定ファイル）: [MIT](LICENSE)
+- **記事本文・著者撮影の画像**（`src/content/pages/**`、`public/image/**`）: [CC BY-SA 4.0](LICENSE-CONTENT)
+- 第三者の著作物（イベントのフライヤー等）は対象外。記事中のコードスニペットは CC0
+
+引用・逐語複製は出典表示のみで認められます（翻訳・改変には CC BY-SA 4.0 が適用されます）。
+
+`public/vendor/mermaid.min.js` は mermaid（MIT、同ディレクトリの `mermaid.LICENSE.txt`）。

@@ -38,7 +38,13 @@ const pageTitle = title ? `${title} - denebola213 pages` : 'denebola213 pages';
       {crumbs && <Breadcrumbs items={crumbs} />}
       <slot />
     </main>
-    <footer class="footer"><small>&copy; 2020 denebola213</small></footer>
+    <footer class="footer">
+      <small>
+        &copy; 2020&ndash;2026 denebola213 &middot;
+        記事は <a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/deed.ja">CC BY-SA 4.0</a> &middot;
+        コードは <a href="https://github.com/denebola213/web-pages/blob/master/LICENSE">MIT</a>
+      </small>
+    </footer>
     <slot name="scripts" />
   </body>
 </html>
