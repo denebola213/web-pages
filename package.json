@@ -15,7 +15,7 @@
     "astro": "astro",
     "check:filenames": "node scripts/check-filenames.mjs",
     "check": "node scripts/check-filenames.mjs && node scripts/check-content.mjs && markdownlint-cli2 && node scripts/check-tags.mjs && node scripts/check-redirects.mjs && node scripts/check-contrast.mjs",
-    "deploy": "astro build && pnpm dlx wrangler deploy",
+    "deploy": "pnpm dlx wrangler@4.151.3 deploy",
     "check:tags": "node scripts/check-tags.mjs",
     "check:content": "node scripts/check-content.mjs",
     "lint:md": "markdownlint-cli2",

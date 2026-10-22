@@ -109,9 +109,25 @@ order: 10
 
 ## デプロイ
 
-Cloudflare Workers（静的アセット）へ GitHub Actions でデプロイする。`master` への push で `pnpm install --frozen-lockfile` → `pnpm build` → 検査 → `wrangler deploy` が走る。
+Cloudflare Workers（静的アセット）へ **Workers Builds**（Git 連携）でデプロイする。GitHub Actions は使わない（`.github/workflows/` に残っているのは Mastodon 投稿のみ）。
 
-必要なリポジトリシークレット: `CLOUDFLARE_API_TOKEN`、`CLOUDFLARE_ACCOUNT_ID`。
+Workers & Pages → `st-albireo` → Settings → Builds で次を設定する。
+
+| 項目 | 値 |
+|---|---|
+| Git branch | `master` |
+| Build command | `pnpm install --frozen-lockfile && pnpm build && pnpm check` |
+| Deploy command | `pnpm dlx wrangler@4.151.3 deploy` |
+| Root directory | （空欄） |
+| Build variables | `PNPM_VERSION=12.14.0` |
+
+- **API トークンは不要**。Cloudflare がビルド用トークンを自動生成する（GitHub Secrets の `CLOUDFLARE_API_TOKEN` は使わない）
+- ビルドイメージの pnpm は既定 10.11.1。このリポジトリは `engines.pnpm: ">=12"` 前提なので `PNPM_VERSION` で 12.14.0 に固定する
+- Node はビルドイメージ既定の 24 系（`engines.node: ">=22.22.0"` を満たす）
+- wrangler は devDependency に入れていない。`workerd` を含むとローカルの `node_modules` が数百 MB 増えるため、**deploy コマンド側でバージョンを固定**している。更新時はここを書き換える
+- 検査（`pnpm check`）がビルドコマンドに含まれるので、落ちればデプロイされない
+- `master` 以外のブランチはプレビュー（version としてアップロード）になる
+- Worker 名・アセット設定は `wrangler.jsonc`（`name: st-albireo`、`assets.directory: ./dist`、`html_handling: auto-trailing-slash`、`not_found_handling: 404-page`）
 
 `public/_redirects` は Cloudflare の静的アセットが解釈する。**`astro dev` では効かない**ので、301 の確認は `pnpm dlx wrangler dev` で行う。
 
