@@ -370,21 +370,6 @@ pre.mermaid {
   font-size: 0.8125rem;
 }
 
-.footer-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem 1.25rem;
-  margin-bottom: 0.6rem;
-}
-
-.footer-nav a,
-.footer-nav a:visited {
-  color: var(--color-text-sub);
-  text-decoration: none;
-}
-
-.footer-nav a:hover { color: var(--color-primary); text-decoration: underline; }
-
 /* =========================================================
    狭い画面
    ========================================================= */
