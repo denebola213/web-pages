@@ -53,7 +53,8 @@ a:visited { color: var(--color-link-visited); }
    レイアウト
    ========================================================= */
 .main {
-  max-width: var(--measure);
+  width: calc(100vw - 1rem);
+  max-width: 74rem;
   margin: 0 auto;
   padding: 0 1.25rem 5rem;
 }
@@ -423,7 +424,8 @@ pre.mermaid {
    フッター
    ========================================================= */
 .footer {
-  max-width: var(--measure);
+  width: calc(100vw - 1rem);
+  max-width: 74rem;
   margin: 0 auto;
   padding: 1.25rem 1.25rem 3rem;
   border-top: 1px solid var(--color-border);

@@ -9,11 +9,10 @@ interface Props {
   description?: string;
   ogTitle?: string;
   crumbs?: Crumb[];
-  wide?: boolean;
 }
 
 export const SITE_NAME = "denebola213_pages";
-const { title, description = "denebola213_pages — 技術メモと日記", ogTitle, crumbs, wide = false } = Astro.props;
+const { title, description = "denebola213_pages — 技術メモと日記", ogTitle, crumbs } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const pageTitle = title ? `${title} - ${SITE_NAME}` : SITE_NAME;
 ---
@@ -36,7 +35,7 @@ const pageTitle = title ? `${title} - ${SITE_NAME}` : SITE_NAME;
     <title>{pageTitle}</title>
   </head>
   <body>
-    <main class:list={['main', { wide }]}>
+    <main class="main">
       {title && (
         <div class="page-head">
           <a class="site-name" href="/">{SITE_NAME}</a>

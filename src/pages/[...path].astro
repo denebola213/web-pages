@@ -79,7 +79,7 @@ const years = [...new Set(diaryPosts.map((p) => (p.data.date as Date).getUTCFull
 const hasMeta = Boolean(entry.data.date) || entry.data.tags.length > 0;
 ---
 
-<Base title={title} description={description} crumbs={crumbs} wide={isDocs && entry.id !== 'docs'}>
+<Base title={title} description={description} crumbs={crumbs}>
   {isDocs && entry.id === 'docs' ? (
     <article>
       <h1>{title}</h1>
