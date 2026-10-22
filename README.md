@@ -22,7 +22,9 @@ pnpm check    # URL・タイトル・Markdown・タグ・リダイレクト・�
 
 `pnpm check` は CI でも同じものを回す。デプロイ前に必ず通すこと。
 
-パッケージマネージャは **pnpm**（`packageManager` でバージョン固定）。`package-lock.json` は持たない。
+パッケージマネージャは **pnpm**（`package.json` の `packageManager` でバージョン固定）。`package-lock.json` は持たない。
+
+依存の導入には供給網ポリシーが掛かる（`pnpm-workspace.yaml` の `minimumReleaseAge: 60`）。公開から 60 分未満のバージョンは入らないので、依存を上げた直後に CI が落ちる場合は時間を置くか、値を調整する。
 
 ## コンテンツ
 
