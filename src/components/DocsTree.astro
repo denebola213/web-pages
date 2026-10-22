@@ -1,0 +1,29 @@
+---
+/**
+ * docs のツリー。再帰コンポーネントなので、自分自身を <Astro.self /> で呼ぶ。
+ * サイドバーではなく本文側に置く（全面表示）。
+ */
+import { titleOf } from '../lib/title.mjs';
+
+export interface TreeNode {
+  id: string;
+  title: string;
+  children: TreeNode[];
+}
+
+interface Props {
+  nodes: TreeNode[];
+  current?: string;
+}
+
+const { nodes, current } = Astro.props;
+---
+
+<ul class="docs-tree">
+  {nodes.map((n) => (
+    <li class:list={[{ 'has-children': n.children.length > 0 }]}>
+      <a href={`/${n.id}/`} aria-current={current === n.id ? 'page' : undefined}>{n.title}</a>
+      {n.children.length > 0 && <Astro.self nodes={n.children} current={current} />}
+    </li>
+  ))}
+</ul>

@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "st-albireo",
+  "compatibility_date": "2026-10-01",
+  // 静的ファイルのみ。Worker スクリプトは持たない = 実行時依存ゼロ。
+  "assets": {
+    "directory": "./dist",
+    // 既存 URL は末尾スラッシュあり。無しアクセスは 301 で寄せる。
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

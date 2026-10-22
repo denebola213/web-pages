@@ -1,0 +1,12 @@
+---
+interface Props {
+  tags: string[];
+  slugOf: (name: string) => string;
+}
+const { tags, slugOf } = Astro.props;
+---
+{tags.length > 0 && (
+  <span class="tags">
+    {tags.map((t) => <a href={`/tags/${slugOf(t)}/`}>#{t}</a>)}
+  </span>
+)}

@@ -2,24 +2,10 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug post_mastodon.ts",
-      "type": "node",
+      "command": "./node_modules/.bin/astro dev",
+      "name": "Development server",
       "request": "launch",
-      "program": "${workspaceFolder}/scripts/post_mastodon.ts",
-      "runtimeExecutable": "/usr/bin/deno",
-      "runtimeArgs": [
-        "run",
-        "--inspect-wait",
-        "--allow-env",
-        "--allow-read",
-        "--allow-net",
-        "--allow-run"
-      ],
-      "env": {
-        "DENO_ENV": "development"
-      },
-      "cwd": "${workspaceFolder}/scripts",
-      "attachSimplePort": 9229
+      "type": "node-terminal"
     }
   ]
 }

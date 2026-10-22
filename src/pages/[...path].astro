@@ -1,0 +1,174 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import DocsTree from '../components/DocsTree.astro';
+import TagList from '../components/TagList.astro';
+import Toc from '../components/Toc.astro';
+import { tagSlug } from '../lib/slug.mjs';
+import { titleOf } from '../lib/title.mjs';
+import tagSlugs from '../data/tag-slugs.json';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('pages', (e) => !e.data.draft && e.id !== 'index');
+  return pages.map((entry) => ({ params: { path: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const all = await getCollection('pages');
+const slugOf = (name: string) => tagSlug(name, tagSlugs as Record<string, string>);
+
+const fmt = (d?: Date) => (d ? d.toISOString().slice(0, 10) : '');
+const body = entry.body ?? '';
+const needsMermaid = body.includes('```mermaid');
+const description = entry.data.description ?? "denebola213_pages — 技術メモと日記";
+
+const isDocs = entry.id === 'docs' || entry.id.startsWith('docs/');
+const isDiary = entry.id === 'diary' || entry.id.startsWith('diary/');
+
+const entryById = (id: string) => all.find((e) => e.id === id);
+const labelOf = (id: string) => { const e = entryById(id); return e ? titleOf(e) : id; };
+const title = titleOf(entry);
+
+/* ---- パンくず ---- */
+const trail = entry.id.split('/');
+const crumbs: { href?: string; label: string }[] = [];
+// ルート（/docs/ や /diary/）はサイト名リンクが先祖の役割を果たすため空のまま
+if (isDocs) {
+  // セクション直下（/docs/）はサイト名が先祖なので、パンくずは積まない
+  if (trail.length > 1) crumbs.push({ href: '/docs/', label: 'ドキュメント' });
+  for (let i = 1; i < trail.length; i++) {
+    const id = trail.slice(0, i + 1).join('/');
+    const last = i === trail.length - 1;
+    crumbs.push(last ? { label: title } : { href: `/${id}/`, label: labelOf(id) });
+  }
+} else if (isDiary) {
+  if (trail.length > 1) crumbs.push({ href: '/diary/', label: '日記' }, { label: fmt(entry.data.date) });
+} else {
+  crumbs.push({ label: title });
+}
+
+/* ---- docs ツリー（サイドバー） ---- */
+interface Node { id: string; title: string; order: number; children: Node[] }
+const docsNodes = new Map<string, Node>();
+for (const e of all) {
+  if (e.id !== 'docs' && !e.id.startsWith('docs/')) continue;
+  docsNodes.set(e.id, { id: e.id, title: titleOf(e), order: e.data.order ?? 0, children: [] });
+}
+const docsRoots: Node[] = [];
+for (const n of docsNodes.values()) {
+  const parentId = n.id.split('/').slice(0, -1).join('/');
+  const parent = parentId ? docsNodes.get(parentId) : undefined;
+  if (parent) parent.children.push(n);
+  else docsRoots.push(n);
+}
+// order 昇順 → 同値は id 順。about は order: 100 で末尾に来る。
+const sortNodes = (arr: Node[]): Node[] => {
+  arr.sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));
+  arr.forEach((n) => sortNodes(n.children));
+  return arr;
+};
+const sideNodes = sortNodes(docsRoots[0]?.children ?? []);
+// カテゴリページ（配下を持つページ）にだけ、その配下のツリーを出す
+const ownNode = docsNodes.get(entry.id);
+const childNodes = ownNode?.children ?? [];
+
+/* ---- 日記: 年別（URL は /diary/YYYYMMDD/ のまま） ---- */
+const diaryPosts = all
+  .filter((e) => e.id.startsWith('diary/') && e.data.date && !e.data.draft)
+  .sort((a, b) => (b.data.date as Date).valueOf() - (a.data.date as Date).valueOf());
+const years = [...new Set(diaryPosts.map((p) => (p.data.date as Date).getUTCFullYear()))];
+
+const updated = entry.data.updated;
+// 公開日と同じ日付なら「更新」は出さない
+const showUpdated = Boolean(updated) && fmt(updated) !== fmt(entry.data.date);
+const hasMeta = Boolean(entry.data.date) || showUpdated || entry.data.tags.length > 0;
+---
+
+<Base title={title} description={description} crumbs={crumbs}>
+  {isDocs ? (
+    <article>
+      <h1>{title}</h1>
+      {hasMeta && (
+        <p class="date-info">
+          {entry.data.date && <time datetime={fmt(entry.data.date)}>{fmt(entry.data.date)}</time>}
+          {showUpdated && <span class="updated">更新: <time datetime={fmt(updated)}>{fmt(updated)}</time></span>}
+          <TagList tags={entry.data.tags} slugOf={slugOf} />
+        </p>
+      )}
+      <Toc headings={headings} />
+      <div class="markdown-content"><div id="content"><Content /></div></div>
+      {childNodes.length > 0 && <DocsTree nodes={childNodes} current={entry.id} />}
+    </article>
+  ) : entry.id === 'diary' ? (
+    <>
+      <article>
+        <h1>{title}</h1>
+        {hasMeta && (
+          <p class="date-info">
+            {entry.data.date && <time datetime={fmt(entry.data.date)}>{fmt(entry.data.date)}</time>}
+            <TagList tags={entry.data.tags} slugOf={slugOf} />
+          </p>
+        )}
+        <Toc headings={headings} />
+        <div class="markdown-content"><Content /></div>
+      </article>
+      {years.map((y) => (
+        <section>
+          <h2 class="year-heading">{y}</h2>
+          <ul class="page-list">
+            {diaryPosts
+              .filter((p) => (p.data.date as Date).getUTCFullYear() === y)
+              .map((p) => (
+                <li>
+                  <a class="page-title" href={`/${p.id}/`}>{titleOf(p)}</a>
+                  <div class="date-info">
+                    <time datetime={fmt(p.data.date)}>{fmt(p.data.date)}</time>
+                    <TagList tags={p.data.tags} slugOf={slugOf} />
+                  </div>
+                </li>
+              ))}
+          </ul>
+        </section>
+      ))}
+    </>
+  ) : (
+    <article>
+      <h1>{title}</h1>
+      {hasMeta && (
+        <p class="date-info">
+          {entry.data.date && <time datetime={fmt(entry.data.date)}>{fmt(entry.data.date)}</time>}
+          {showUpdated && <span class="updated">更新: <time datetime={fmt(updated)}>{fmt(updated)}</time></span>}
+          <TagList tags={entry.data.tags} slugOf={slugOf} />
+        </p>
+      )}
+      <Toc headings={headings} />
+      <div class="markdown-content"><div id="content"><Content /></div></div>
+    </article>
+  )}
+  {needsMermaid && (
+    <Fragment slot="scripts">
+      <script is:inline src="/vendor/mermaid.min.js" defer></script>
+      <script is:inline>
+        // CDN 依存をやめ、public/vendor の固定版を使う。
+        // mermaid.min.js は UMD なので window.mermaid に生える。defer で
+        // 読み終えてから DOMContentLoaded で初期化する。
+        document.addEventListener('DOMContentLoaded', function () {
+          mermaid.initialize({
+            startOnLoad: false,
+            theme: 'neutral',
+            themeVariables: {
+              primaryColor: '#ffffff',
+              primaryBorderColor: '#0066be',
+              primaryTextColor: '#1a1a1a',
+              lineColor: '#5f6673',
+              fontFamily: 'Noto Sans JP, system-ui, sans-serif',
+              fontSize: '14px',
+            },
+          });
+          mermaid.run();
+        });
+      </script>
+    </Fragment>
+  )}
+</Base>

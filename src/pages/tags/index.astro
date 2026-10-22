@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { tagSlug } from '../../lib/slug.mjs';
+import { titleOf } from '../../lib/title.mjs';
+import tagSlugs from '../../data/tag-slugs.json';
+
+// タグはブログ（diary）のみを対象にする。docs は階層で辿れる。
+const posts = await getCollection('pages', (e) => e.data.tags.length > 0 && !e.data.draft);
+const slugOf = (name: string) => tagSlug(name, tagSlugs as Record<string, string>);
+const terms = [...new Set(posts.flatMap((p) => p.data.tags))]
+  .map((name) => ({ name, slug: slugOf(name), count: posts.filter((p) => p.data.tags.includes(name)).length }))
+  .sort((a, b) => a.slug.localeCompare(b.slug));
+---
+
+<Base title="タグ">
+  <h1>タグ</h1>
+  <ul class="tag-index">
+    {terms.map((t) => <li><a href={`/tags/${t.slug}/`}>#{t.name}</a> <span class="count">{t.count}</span></li>)}
+  </ul>
+</Base>

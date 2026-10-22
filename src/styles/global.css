@@ -1,0 +1,459 @@
+@import './tokens.css';
+
+/* =========================================================
+   ベース
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: var(--leading);
+  letter-spacing: 0.01em;
+}
+
+/* フォーカス: 単一リング。白地に対して 9.73:1 */
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+::selection { background: #cfe6fb; }
+
+a {
+  color: var(--color-link);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+  text-decoration-thickness: 2px;
+}
+
+a:visited { color: var(--color-link-visited); }
+
+/* サイト名とパンくずは本文色のまま（リンク色にしない例外） */
+.site-name,
+.site-name:visited,
+.crumbs a,
+.crumbs a:visited { color: var(--color-text-sub); }
+
+/* ナビゲーション・一覧は訪問色にせず、リンク色のまま据え置く */
+.page-list a:visited,
+.docs-tree a:visited,
+.tag-index a:visited,
+.tags a:visited,
+.home-links a:visited { color: var(--color-link); }
+
+/* =========================================================
+   レイアウト
+   ========================================================= */
+.main {
+  width: calc(100vw - 1rem);
+  max-width: 74rem;
+  margin: 0 auto;
+  padding: 0 1.25rem 5rem;
+}
+
+
+/* =========================================================
+   ページ上部: サイト名 + パンくず
+   ========================================================= */
+.page-head { padding: 1.5rem 0 0; }
+
+.site-name {
+  display: inline-block;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--color-text-sub);
+  text-decoration: none;
+}
+
+.site-name:hover { color: var(--color-primary); text-decoration: underline; }
+
+/* サイト名の下ではパンくずの上余白を詰める */
+.page-head .crumbs { padding: 0.4rem 0 0; }
+
+/* =========================================================
+   パンくず
+   ========================================================= */
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 1.5rem 0 2.5rem;
+  font-size: 0.8125rem;
+  color: var(--color-text-sub);
+  list-style: none;
+}
+
+.crumbs a { color: var(--color-text-sub); text-decoration: none; }
+.crumbs a:hover { color: var(--color-primary); text-decoration: underline; }
+.crumbs .sep { color: var(--line-500); }
+.crumbs [aria-current] { color: var(--color-text); }
+
+/* =========================================================
+   見出し・本文
+   ========================================================= */
+h1, h2, h3, h4 {
+  line-height: 1.45;
+  letter-spacing: 0;
+  margin: 2.5rem 0 0.75rem;
+}
+
+h1 { font-size: 1.75rem; }
+h2 {
+  font-size: 1.3125rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--color-border);
+}
+h3 { font-size: 1.0625rem; }
+h4 { font-size: 1rem; }
+
+p, ul, ol, dl, blockquote, table, pre, figure { margin: 0 0 1.5rem; }
+
+ul, ol { padding-left: 1.5rem; }
+li { margin-bottom: 0.25rem; }
+
+blockquote {
+  margin-left: 0;
+  padding: 0 0 0 1rem;
+  border-left: 3px solid var(--color-border);
+  color: var(--color-text-sub);
+}
+
+blockquote p:last-child { margin-bottom: 0; }
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  margin: 2.5rem 0;
+}
+
+.lede {
+  font-size: 1.0625rem;
+  color: #3b4149;
+}
+
+/* =========================================================
+   メタ情報
+   ========================================================= */
+.date-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  color: var(--color-text-sub);
+  font-size: 0.8125rem;
+}
+
+/* =========================================================
+   一覧（罫線のみ）
+   ========================================================= */
+.page-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem;
+}
+
+.page-list li {
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--color-border);
+  margin: 0;
+}
+
+.page-list li:first-child { border-top: 1px solid var(--color-border); }
+
+.page-title {
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--color-link);
+}
+
+.page-title:hover { text-decoration: underline; }
+
+.date-info .updated { color: var(--color-text-sub); }
+
+.page-list .date-info { margin-top: 0.2rem; }
+
+/* docs 索引の記事一覧（セクション名は補助情報として小さく添える） */
+.list-section { color: var(--color-text-sub); }
+.list-section::after {
+  content: "·";
+  margin-left: 0.6rem;
+  color: var(--color-border-strong);
+}
+
+/* 年別見出し */
+.year-heading {
+  margin: 3rem 0 0.5rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-text-sub);
+}
+
+.year-heading:first-of-type { margin-top: 2rem; }
+
+/* =========================================================
+   タグ（枠線のみ）
+   ========================================================= */
+.tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.tags a {
+  display: inline-block;
+  padding: 0.02rem 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-link);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  text-decoration: none;
+}
+
+.tags a:hover {
+  border-color: var(--color-border-strong);
+  color: var(--color-primary);
+}
+
+.tag-index {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tag-index li {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tag-index a { text-decoration: none; }
+
+.count { color: var(--color-text-sub); font-size: 0.8125rem; }
+
+/* =========================================================
+   目次（h2 / h3・折りたたみ可）
+   ========================================================= */
+.toc {
+  margin: 1.75rem 0 2.5rem;
+  padding: 0.9rem 1.1rem 1rem;
+  background: var(--color-toc-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-6);
+  font-size: 0.9375rem;
+  line-height: 1.8;
+}
+
+.toc > summary {
+  cursor: pointer;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-text-sub);
+}
+
+.toc[open] > summary { margin-bottom: 0.55rem; }
+
+.toc-list,
+.toc-sub { margin: 0; padding-left: 1.15rem; }
+
+.toc li { margin: 0.1rem 0; }
+
+/* 目次は面が青いので、リンクは一段濃い青（#00428c / 8.0:1）＋下線で色だけに頼らない */
+.toc a {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
+.toc a:hover { color: var(--color-primary); }
+.toc a:visited { color: var(--color-primary-hover); }
+
+/* =========================================================
+   本文（Markdown 由来）
+   ========================================================= */
+.markdown-content > :first-child { margin-top: 0; }
+
+.markdown-content h1 { font-size: 1.625rem; margin-top: 0; }
+.markdown-content h2 { margin-top: 2.75rem; }
+
+.markdown-content img {
+  display: block;
+  max-width: 100%;
+  /* 縦長のスクリーンショットが画面を占有しないよう高さを抑える（比率は保つ） */
+  max-height: min(60vh, 42rem);
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  border-radius: var(--radius-4);
+}
+
+/* 画像 + キャプション（Markdown の段落から figure 化） */
+.markdown-content figure { margin: 1.75rem 0; }
+
+.markdown-content figcaption {
+  margin-top: 0.55rem;
+  color: var(--color-text-sub);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.markdown-content pre {
+  overflow-x: auto;
+  background: var(--color-code-bg);
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-6);
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+/* shiki は <pre> にインラインで background-color を当てるため、面の色はこちらで上書きする */
+.markdown-content pre.astro-code {
+  background: var(--color-code-bg) !important;
+}
+
+.markdown-content pre code { font-family: var(--font-mono); }
+
+.markdown-content :not(pre) > code {
+  background: var(--color-code-bg);
+  border-radius: var(--radius-4);
+  padding: 0.08em 0.35em;
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+/* Mermaid の図はコードブロックとして装飾しない */
+pre.mermaid {
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.markdown-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.markdown-content th,
+.markdown-content td {
+  border: 1px solid var(--color-border);
+  padding: 0.45rem 0.7rem;
+  text-align: left;
+}
+
+.markdown-content th { font-weight: 700; }
+
+/* =========================================================
+   ドキュメント: ツリー（本文側に全面表示）
+   ========================================================= */
+.docs-tree {
+  list-style: none;
+  margin: 0 0 2rem;
+  padding: 0;
+  font-size: 1.0625rem; /* 15px → 17px。本文（16px）より一段大きく */
+  line-height: 1.85;
+}
+
+/* 入れ子は 1px の罫線で階層を示す（影・面は使わない） */
+.docs-tree ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  border-left: 1px solid var(--color-border);
+}
+
+.docs-tree li { margin: 0; }
+
+.docs-tree a {
+  color: var(--color-link);
+  text-decoration: none;
+}
+
+.docs-tree a:hover { color: var(--color-primary); text-decoration: underline; }
+
+.docs-tree a[aria-current] {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.docs-tree .has-children > a { font-weight: 700; }
+
+/* =========================================================
+   ホーム（2 リンクのみ）
+   ========================================================= */
+.home-links {
+  list-style: none;
+  padding: 0;
+  margin: 2.5rem 0 0;
+}
+
+.home-links li { margin: 0; }
+
+.home-links a {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 1.1rem 0;
+  color: var(--color-link);
+  text-decoration: none;
+}
+
+.home-links a:hover .t { text-decoration: underline; }
+
+.home-links .t { font-size: 1.125rem; font-weight: 700; }
+.home-links .d { color: var(--color-text-sub); font-size: 0.8125rem; }
+
+/* ホーム下部の自己紹介 */
+.home-intro {
+  margin-top: 2.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.9;
+}
+
+.home-intro p { margin: 0 0 1rem; }
+.home-intro ul { margin: 0; padding-left: 1.15rem; }
+.home-intro li { margin: 0.2rem 0; }
+.home-intro ul ul { margin: 0.2rem 0 0; }
+
+/* =========================================================
+   フッター
+   ========================================================= */
+.footer {
+  width: calc(100vw - 1rem);
+  max-width: 74rem;
+  margin: 0 auto;
+  padding: 1.25rem 1.25rem 3rem;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-sub);
+  font-size: 0.8125rem;
+}
+
+/* =========================================================
+   狭い画面
+   ========================================================= */
+@media (max-width: 32rem) {
+  .main { padding: 0 1rem 4rem; }
+  h1 { font-size: 1.5rem; }
+  .markdown-content h1 { font-size: 1.375rem; }
+}

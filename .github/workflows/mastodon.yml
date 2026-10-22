@@ -1,0 +1,38 @@
+name: mastodon
+
+# 記事が追加された push のときだけ走る（README や workflow だけの変更では発火しない）
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'src/content/pages/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# 連続 push で告知が落ちないように、実行は直列化して取り消さない
+concurrency:
+  group: mastodon-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # before..sha の差分を取るため全履歴が要る（fetch-depth: 2 では複数コミット push に足りない）
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # 依存パッケージは使わない（node の組み込み fetch と src/lib のみ）ので install しない
+      - name: Mastodon へ投稿
+        env:
+          MASTODON_TOKEN: ${{ secrets.MASTODON_TOKEN }}
+          BEFORE_SHA: ${{ github.event.before }}
+          GITHUB_SHA: ${{ github.sha }}
+        run: node scripts/post-mastodon.mjs
