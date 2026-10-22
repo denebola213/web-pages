@@ -4,16 +4,18 @@
   "version": "0.0.1",
   "license": "MIT",
   "engines": {
-    "node": ">=22.22.0"
+    "node": ">=22.22.0",
+    "pnpm": ">=10"
   },
+  "packageManager": "pnpm@10.34.7",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
     "check:filenames": "node scripts/check-filenames.mjs",
-    "check": "node scripts/check-filenames.mjs && node scripts/check-content.mjs && npx markdownlint-cli2 && node scripts/check-tags.mjs && node scripts/check-redirects.mjs && node scripts/check-contrast.mjs",
-    "deploy": "astro build && npx wrangler deploy",
+    "check": "node scripts/check-filenames.mjs && node scripts/check-content.mjs && markdownlint-cli2 && node scripts/check-tags.mjs && node scripts/check-redirects.mjs && node scripts/check-contrast.mjs",
+    "deploy": "astro build && pnpm dlx wrangler deploy",
     "check:tags": "node scripts/check-tags.mjs",
     "check:content": "node scripts/check-content.mjs",
     "lint:md": "markdownlint-cli2",

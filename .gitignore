@@ -25,3 +25,7 @@ pnpm-debug.log*
 
 # デザイン確認用の生成物（scripts で再生成）
 sample/
+
+# pnpm
+.pnpm-store/
+pnpm-debug.log*

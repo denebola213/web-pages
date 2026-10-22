@@ -14,13 +14,15 @@ https://www.st-albireo.net のソース。Astro による完全静的サイト�
 ## 開発
 
 ```sh
-npm ci
-npm run dev      # http://localhost:4321
-npm run build    # dist/ へ静的出力
-npm run check    # URL・タイトル・Markdown・タグ・リダイレクト・コントラストの検査
+pnpm install
+pnpm dev      # http://localhost:4321
+pnpm build    # dist/ へ静的出力
+pnpm check    # URL・タイトル・Markdown・タグ・リダイレクト・コントラストの検査
 ```
 
-`npm run check` は CI でも同じものを回す。デプロイ前に必ず通すこと。
+`pnpm check` は CI でも同じものを回す。デプロイ前に必ず通すこと。
+
+パッケージマネージャは **pnpm**（`packageManager` でバージョン固定）。`package-lock.json` は持たない。
 
 ## コンテンツ
 
@@ -32,11 +34,11 @@ npm run check    # URL・タイトル・Markdown・タグ・リダイレクト�
 
 ## デプロイ
 
-Cloudflare Workers（静的アセット）へ GitHub Actions でデプロイする。`master` への push で `npm ci` → `npm run build` → 検査 → `wrangler deploy` が走る。
+Cloudflare Workers（静的アセット）へ GitHub Actions でデプロイする。`master` への push で `pnpm install --frozen-lockfile` → `pnpm build` → 検査 → `wrangler deploy` が走る。
 
 必要なリポジトリシークレット: `CLOUDFLARE_API_TOKEN`、`CLOUDFLARE_ACCOUNT_ID`。
 
-`public/_redirects` は Cloudflare の静的アセットが解釈する。**`astro dev` では効かない**ので、301 の確認は `npx wrangler dev` で行う。
+`public/_redirects` は Cloudflare の静的アセットが解釈する。**`astro dev` では効かない**ので、301 の確認は `pnpm dlx wrangler dev` で行う。
 
 ## ライセンス
 

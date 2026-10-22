@@ -19,20 +19,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # packageManager フィールドのバージョンを使う。setup-node より先に置くこと
+      # （cache: pnpm が pnpm の存在を前提にするため）。
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
+          cache: pnpm
 
-      - run: npm ci
-      - run: npm run build
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
 
       # URL 互換の回帰テスト: 公開済み URL が 1 本でも欠けたら deploy しない
       - name: 記事フォーマット / URL 互換チェック
         run: |
           node scripts/check-filenames.mjs   # ファイル名 = URL
           node scripts/check-content.mjs     # title と本文 H1 の一致
-          npx markdownlint-cli2              # 記事 Markdown の書式
+          pnpm exec markdownlint-cli2        # 記事 Markdown の書式
           node scripts/check-tags.mjs        # 日本語タグのスラッグ確定
           node scripts/check-redirects.mjs   # URL 欠落 / 301 の整合
           node scripts/check-contrast.mjs    # WCAG のコントラスト要件
