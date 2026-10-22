@@ -44,7 +44,6 @@ a:visited { color: var(--color-link-visited); }
 .crumbs a:visited,
 .page-list a:visited,
 .docs-tree a:visited,
-.docs-nav a:visited,
 .tag-index a:visited,
 .tags a:visited,
 .home-links a:visited { color: inherit; }
@@ -332,70 +331,6 @@ pre.mermaid {
 .docs-tree .has-children > a { font-weight: 700; }
 
 /* =========================================================
-   ドキュメント: サイドツリー（記事ページ）
-   ========================================================= */
-.docs-grid {
-  display: grid;
-  grid-template-columns: 13.5rem minmax(0, 1fr);
-  gap: 3.5rem;
-  align-items: start;
-}
-
-.docs-nav {
-  position: sticky;
-  top: 2rem;
-  align-self: start;
-  /* パンくず直下に密着させない。本文 h1 の上余白（2.5rem）に合わせて天を揃える */
-  margin-top: 2.5rem;
-  max-height: calc(100vh - 4rem);
-  overflow-y: auto;
-  padding-right: 1.25rem;
-  border-right: 1px solid var(--color-border);
-  font-size: 0.875rem;
-  line-height: 1.7;
-}
-
-.docs-nav > summary { display: none; }
-
-.docs-nav .home {
-  display: inline-block;
-  margin-bottom: 1rem;
-  color: var(--color-text-sub);
-  font-size: 0.8125rem;
-  text-decoration: none;
-}
-
-.docs-nav .home:hover { color: var(--color-primary); text-decoration: underline; }
-
-.docs-nav ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.docs-nav li { margin: 0; }
-
-.docs-nav a {
-  display: block;
-  padding: 0.2rem 0 0.2rem 0.6rem;
-  border-left: 2px solid transparent;
-  color: var(--color-text);
-  text-decoration: none;
-}
-
-.docs-nav a:hover { color: var(--color-primary); text-decoration: underline; }
-
-.docs-nav a[aria-current] {
-  border-left-color: var(--color-primary);
-  color: var(--color-primary);
-  font-weight: 700;
-}
-
-.docs-nav .group > a { font-weight: 700; margin-top: 0.6rem; }
-.docs-nav .group > ul { padding-left: 0.5rem; }
-.docs-nav .group > ul a { color: #3b4149; }
-
-/* =========================================================
    ホーム（2 リンクのみ）
    ========================================================= */
 .home-links {
@@ -438,30 +373,6 @@ pre.mermaid {
 /* =========================================================
    狭い画面
    ========================================================= */
-@media (max-width: 56rem) {
-  .docs-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
-
-  .docs-nav {
-    position: static;
-    max-height: none;
-    overflow: visible;
-    margin: 1.5rem 0 2rem;
-    padding: 0 0 1rem;
-    border-right: 0;
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .docs-nav > summary {
-    display: block;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 0.875rem;
-    color: var(--color-text-sub);
-  }
-
-  .docs-nav[open] > summary { margin-bottom: 0.75rem; }
-}
-
 @media (max-width: 32rem) {
   .main { padding: 0 1rem 4rem; }
   h1 { font-size: 1.5rem; }
