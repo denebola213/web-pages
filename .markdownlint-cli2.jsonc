@@ -3,7 +3,7 @@
   "config": {
     // 日本語は単語間に空白がなく、80 桁制約が意味を持たない
     "MD013": false,
-    // H1 は frontmatter title と本文の 1 つ。重複検査は scripts/check-content.mjs が担う
+    // H1 は frontmatter title と本文の 1 つ。重複検査は scripts/check-content.ts が担う
     "MD025": { "front_matter_title": "" },
     // コードブロック内のタブは本文ではなく内容
     "MD010": { "code_blocks": false },

@@ -7,7 +7,7 @@
  *  - 見出し内のインライン記法（リンク・コード・強調）を素のテキストに落とす
  */
 
-const stripInline = (s) =>
+const stripInline = (s: string): string =>
   s
     .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
     .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
@@ -16,13 +16,9 @@ const stripInline = (s) =>
     .replace(/\*\*|__|\*|_/g, '')
     .trim();
 
-/**
- * 本文の最初の H1 を返す（コードフェンス内は無視）。無ければ null。
- * @param {string} body
- * @returns {string | null}
- */
-export function firstH1(body = '') {
-  let fence = null;
+/** 本文の最初の H1 を返す（コードフェンス内は無視）。無ければ null。 */
+export function firstH1(body: string = ''): string | null {
+  let fence: string | null = null;
   for (const line of body.split('\n')) {
     const m = line.match(/^\s*(`{3,}|~{3,})/);
     if (m) {
@@ -36,12 +32,16 @@ export function firstH1(body = '') {
   return null;
 }
 
+/** タイトルを決めるのに必要な最小のエントリ（Astro のコレクション entry を受ける） */
+export interface TitledEntry {
+  id: string;
+  body?: string;
+}
+
 /**
  * コレクションのエントリからタイトルを決める。
  * 本文に H1 が無い場合は id の末尾（= URL の slug）にフォールバックする。
- * @param {{ id: string, body?: string }} entry
- * @returns {string}
  */
-export function titleOf(entry) {
+export function titleOf(entry: TitledEntry): string {
   return firstH1(entry.body ?? '') ?? entry.id.split('/').pop() ?? entry.id;
 }

@@ -35,4 +35,4 @@ jobs:
           MASTODON_TOKEN: ${{ secrets.MASTODON_TOKEN }}
           BEFORE_SHA: ${{ github.event.before }}
           GITHUB_SHA: ${{ github.sha }}
-        run: node scripts/post-mastodon.mjs
+        run: node scripts/post-mastodon.ts

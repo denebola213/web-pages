@@ -33,6 +33,10 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      # .astro/types.d.ts を生成してから型検査する（astro sync を含む）
+      - name: 型検査（TypeScript）
+        run: pnpm typecheck
+
       # dist/ を作る。check-redirects は dist/_redirects を読むため build が先。
       - run: pnpm build
 

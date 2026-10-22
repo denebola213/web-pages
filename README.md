@@ -17,6 +17,7 @@ pnpm install
 pnpm dev      # http://localhost:4321
 pnpm build    # dist/ へ静的出力
 pnpm check    # URL・タイトル・Markdown・タグ・リダイレクト・コントラストの検査
+pnpm typecheck # TypeScript の型検査（astro sync + tsc --noEmit）
 ```
 
 `pnpm check` は GitHub Actions（`ci.yml`）でも同じものを回す。`pull_request` で走るので、マージ前に必ず緑にする（ブランチ保護で `ci / check` を必須にしておくと確実）。
@@ -136,11 +137,11 @@ Workers & Pages → `st-albireo` → Settings → Builds で次を設定する�
 
 ## Mastodon への投稿
 
-`master` に**記事を追加**すると、`.github/workflows/mastodon.yml` が `scripts/post-mastodon.mjs` を実行し、記事名と URL を 1 記事 1 投稿で流す。
+`master` に**記事を追加**すると、`.github/workflows/mastodon.yml` が `scripts/post-mastodon.ts` を実行し、記事名と URL を 1 記事 1 投稿で流す。
 
 - 対象は `src/content/pages/{docs,diary}/**.md` のうち、その push で**追加**されたもの（`git diff --diff-filter=A`）。修正・リネームでは投稿しない
 - `index.md`（セクション索引）と `draft: true` は除外
-- タイトルと URL はサイト本体と同じ `src/lib/title.mjs` / `src/lib/slug.mjs` から取る
+- タイトルと URL はサイト本体と同じ `src/lib/title.ts` / `src/lib/slug.ts` から取る
 - 記事 URL が 200 を返すまで最大 5 分待ってから投稿する（deploy 完了待ち。`LIVE_TIMEOUT_MS` で変更、`SKIP_LIVE_CHECK=1` で無効化）
 - 同じコミットの再実行は `Idempotency-Key` で重複投稿にならない（Mastodon 側のキャッシュが切れた後の再実行は重複し得る）
 - ローカル確認は投稿せず本文だけ出す:

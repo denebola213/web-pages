@@ -6,12 +6,20 @@
  */
 import { readdir } from 'node:fs/promises';
 import { join, relative } from 'node:path';
-import { slugifySegment } from '../src/lib/slug.mjs';
+import { fileURLToPath } from 'node:url';
+import { slugifySegment } from '../src/lib/slug.ts';
 
-const ROOT = new URL('../src/content/pages', import.meta.url);
-const problems = [];
+const ROOT = fileURLToPath(new URL('../src/content/pages', import.meta.url));
 
-async function walk(dir) {
+interface Problem {
+  file: string;
+  fixed: string;
+  reason: string;
+}
+
+const problems: Problem[] = [];
+
+async function walk(dir: string): Promise<void> {
   for (const e of await readdir(dir, { withFileTypes: true })) {
     const p = join(dir, e.name);
     if (e.isDirectory()) {
@@ -26,7 +34,7 @@ async function walk(dir) {
     // slugify で変わらない非 ASCII 名（例: 天体.md）も URL が非 ASCII になるため弾く
     if (nonAscii || fixed !== stem) {
       problems.push({
-        file: relative(ROOT.pathname, p),
+        file: relative(ROOT, p),
         fixed,
         reason: nonAscii ? '非ASCII' : '_ または大文字を含む',
       });
@@ -34,11 +42,12 @@ async function walk(dir) {
   }
 }
 
-await walk(ROOT.pathname);
+await walk(ROOT);
 
 if (problems.length) {
   console.error(`✗ URL と一致しないファイル名が ${problems.length} 件あります:`);
-  for (const p of problems) console.error(`  - ${p.file}  (${p.reason}) → ${p.fixed}.md にリネームしてください`);
+  for (const p of problems)
+    console.error(`  - ${p.file}  (${p.reason}) → ${p.fixed}.md にリネームしてください`);
   process.exit(1);
 }
 console.log('✓ すべてのファイル名が URL と一致しています');

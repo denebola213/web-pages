@@ -1,10 +1,9 @@
-// @ts-check
 import { defineConfig } from 'astro/config';
 import { satteri } from '@astrojs/markdown-satteri';
-import mermaid from './src/lib/mermaid.satteri.mjs';
-import dropH1 from './src/lib/drop-h1.satteri.mjs';
-import figure from './src/lib/figure.satteri.mjs';
-import imageAttrs from './src/lib/image-attrs.integration.mjs';
+import mermaid from './src/lib/mermaid.satteri.ts';
+import dropH1 from './src/lib/drop-h1.satteri.ts';
+import figure from './src/lib/figure.satteri.ts';
+import imageAttrs from './src/lib/image-attrs.integration.ts';
 
 export default defineConfig({
   site: 'https://www.st-albireo.net',

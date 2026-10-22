@@ -9,17 +9,35 @@
  */
 import { readFileSync, existsSync } from 'node:fs';
 
-const root = new URL('../', import.meta.url);
-const rd = (p) => readFileSync(new URL(p, root), 'utf8');
-const distHas = (u) => existsSync(new URL(u === '/' ? 'dist/index.html' : `dist${u}index.html`, root));
+/** public/_redirects の 1 行 */
+interface Rule {
+  from: string;
+  to: string;
+  code: string;
+}
 
-const lock = rd('urls.lock').split('\n').map((l) => l.trim()).filter((l) => l && !l.startsWith('#'));
+const root = new URL('../', import.meta.url);
+const rd = (p: string): string => readFileSync(new URL(p, root), 'utf8');
+const distHas = (u: string): boolean =>
+  existsSync(new URL(u === '/' ? 'dist/index.html' : `dist${u}index.html`, root));
+
+const lock = rd('urls.lock')
+  .split('\n')
+  .map((l) => l.trim())
+  .filter((l) => l && !l.startsWith('#'));
+
 const raw = existsSync(new URL('dist/_redirects', root)) ? rd('dist/_redirects') : '';
-const rules = raw.split('\n').map((l) => l.trim()).filter((l) => l && !l.startsWith('#'))
-  .map((l) => { const [from, to, code] = l.split(/\s+/); return { from, to, code: code ?? '302' }; });
+const rules: Rule[] = raw
+  .split('\n')
+  .map((l) => l.trim())
+  .filter((l) => l && !l.startsWith('#'))
+  .map((l) => {
+    const [from, to, code] = l.split(/\s+/);
+    return { from, to, code: code ?? '302' };
+  });
 
 /** rule が url に一致すれば実際の転送先を返す（不一致は null） */
-function resolve(rule, url) {
+function resolve(rule: Rule, url: string): string | null {
   if (rule.from.endsWith('*')) {
     const pre = rule.from.slice(0, -1);
     if (!url.startsWith(pre) || url === pre) return null;
@@ -28,15 +46,22 @@ function resolve(rule, url) {
   return rule.from === url ? rule.to : null;
 }
 
-const errors = [];
-const permanent = (c) => c === '301' || c === '308';
+const errors: string[] = [];
+const permanent = (c: string): boolean => c === '301' || c === '308';
 
 for (const u of lock) {
   if (distHas(u)) continue;
-  const hits = rules.map((r) => [r, resolve(r, u)]).filter(([, d]) => d);
-  if (!hits.length) { errors.push(`lock URL が配信もリダイレクトもされない: ${u}`); continue; }
-  for (const [r, dest] of hits) {
-    if (!permanent(r.code)) errors.push(`恒久移動は 301/308: ${u} (${r.code})`);
+  const hits: Array<{ rule: Rule; dest: string }> = [];
+  for (const rule of rules) {
+    const dest = resolve(rule, u);
+    if (dest) hits.push({ rule, dest });
+  }
+  if (!hits.length) {
+    errors.push(`lock URL が配信もリダイレクトもされない: ${u}`);
+    continue;
+  }
+  for (const { rule, dest } of hits) {
+    if (!permanent(rule.code)) errors.push(`恒久移動は 301/308: ${u} (${rule.code})`);
     if (!/^https?:/.test(dest) && !distHas(dest)) errors.push(`転送先が存在しない: ${u} -> ${dest}`);
   }
 }
@@ -51,7 +76,8 @@ for (const r of rules) {
 
 for (const r of rules) {
   if (r.to.includes(':splat')) continue;
-  if (rules.some((o) => o !== r && resolve(o, r.to))) errors.push(`リダイレクト連鎖: ${r.from} -> ${r.to} -> …`);
+  if (rules.some((o) => o !== r && resolve(o, r.to)))
+    errors.push(`リダイレクト連鎖: ${r.from} -> ${r.to} -> …`);
 }
 
 if (errors.length) {

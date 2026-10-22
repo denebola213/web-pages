@@ -8,7 +8,7 @@
  *
  * - 対象: この push で「追加」された src/content/pages/{docs,diary}/**.md
  * - 除外: セクション索引の index.md、frontmatter が `draft: true` のもの
- * - タイトルと URL は src/lib/title.mjs / src/lib/slug.mjs から取る
+ * - タイトルと URL は src/lib/title.ts / src/lib/slug.ts から取る
  *   （サイト本体と同じ実装。ここで独自に組み立てない）
  * - 記事 URL が実際に 200 を返すまで待ってから投稿する（deploy 完了待ち）
  *
@@ -26,8 +26,18 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, appendFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
-import { idFromPath } from '../src/lib/slug.mjs';
-import { titleOf } from '../src/lib/title.mjs';
+import { idFromPath } from '../src/lib/slug.ts';
+import { titleOf } from '../src/lib/title.ts';
+
+/** 投稿対象の記事 */
+interface Article {
+  /** リポジトリからの相対パス（例: src/content/pages/diary/20201104.md） */
+  path: string;
+  /** ページ id（= URL パス） */
+  id: string;
+  /** 本文 H1 から取ったタイトル */
+  title: string;
+}
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const CONTENT_PREFIX = 'src/content/pages/';
@@ -41,16 +51,16 @@ const LIVE_TIMEOUT_MS = Number(process.env.LIVE_TIMEOUT_MS ?? 300_000);
 // Mastodon の既定上限は 500 文字。URL は 23 文字換算なので、タイトルは余裕を見て切る。
 const MAX_TITLE = 200;
 
-function git(args) {
+function git(args: readonly string[]): string {
   return execFileSync('git', args, { cwd: ROOT, encoding: 'utf8' });
 }
 
-function fail(message) {
+function fail(message: string): never {
   console.error(`✗ ${message}`);
   process.exit(1);
 }
 
-function resolveRange() {
+function resolveRange(): { sha: string; base: string } {
   const sha = process.env.GITHUB_SHA || git(['rev-parse', 'HEAD']).trim();
   let base = process.env.BEFORE_SHA || '';
 
@@ -77,7 +87,7 @@ function resolveRange() {
 }
 
 /** この push で追加されたファイル（A）だけを返す */
-function addedFiles(base, sha) {
+function addedFiles(base: string, sha: string): string[] {
   const out = git(['diff', '--name-status', '--diff-filter=A', `${base}..${sha}`]);
   return out
     .split('\n')
@@ -87,18 +97,18 @@ function addedFiles(base, sha) {
     .map(([, path]) => path);
 }
 
-function frontmatter(text) {
+function frontmatter(text: string): string {
   return text.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? '';
 }
 
-function collectArticles(base, sha) {
+function collectArticles(base: string, sha: string): Article[] {
   const files = addedFiles(base, sha);
 
   if (files.length === 0) {
     console.log('追加されたファイルはありません。');
   }
 
-  const articles = [];
+  const articles: Article[] = [];
   for (const path of files) {
     if (!path.startsWith(CONTENT_PREFIX) || !path.endsWith('.md')) {
       console.log(`- 対象外（コンテンツ外）: ${path}`);
@@ -126,12 +136,12 @@ function collectArticles(base, sha) {
   return articles;
 }
 
-function statusText({ title, id }) {
+function statusText({ title, id }: Pick<Article, 'title' | 'id'>): string {
   const text = title.length > MAX_TITLE ? `${title.slice(0, MAX_TITLE - 1)}…` : title;
   return `新しい記事を公開しました。\n# ${text}\n\n${SITE}/${id}/`;
 }
 
-async function waitUntilLive(url) {
+async function waitUntilLive(url: string): Promise<boolean> {
   if (SKIP_LIVE_CHECK || DRY_RUN) return true;
 
   const deadline = Date.now() + LIVE_TIMEOUT_MS;
@@ -141,14 +151,15 @@ async function waitUntilLive(url) {
       if (res.ok) return true;
       console.log(`  ${url} はまだ ${res.status}。deploy の完了を待ちます`);
     } catch (e) {
-      console.log(`  ${url} の確認に失敗（${e.message}）。再試行します`);
+      const reason = e instanceof Error ? e.message : String(e);
+      console.log(`  ${url} の確認に失敗（${reason}）。再試行します`);
     }
     if (Date.now() >= deadline) return false;
     await new Promise((r) => setTimeout(r, 10_000));
   }
 }
 
-async function postStatus(text, idempotencyKey) {
+async function postStatus(text: string, idempotencyKey: string): Promise<unknown> {
   const res = await fetch(`${INSTANCE}/api/v1/statuses`, {
     method: 'POST',
     headers: {
@@ -167,7 +178,7 @@ async function postStatus(text, idempotencyKey) {
   return res.json();
 }
 
-function summarize(lines) {
+function summarize(lines: string[]): void {
   console.log(lines.join('\n'));
   if (process.env.GITHUB_STEP_SUMMARY) {
     appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join('\n') + '\n');
@@ -187,7 +198,7 @@ if (articles.length === 0) {
   process.exit(0);
 }
 
-const results = [];
+const results: string[] = [];
 for (const article of articles) {
   const url = `${SITE}/${article.id}/`;
   const text = statusText(article);
@@ -205,7 +216,7 @@ for (const article of articles) {
   try {
     await postStatus(text, `${sha}:${article.id}`);
   } catch (e) {
-    fail(`${article.path}: ${e.message}`);
+    fail(`${article.path}: ${e instanceof Error ? e.message : String(e)}`);
   }
   console.log(`✓ 投稿しました: ${article.title} ${url}`);
   results.push(`- ${text.split('\n')[1]} → ${url}`);

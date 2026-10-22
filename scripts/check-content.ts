@@ -6,7 +6,7 @@
  * （二重管理を避け、markdownlint の MD041 とも一致させる）。
  * テンプレートはこの H1 を読んで <title>・パンくず・サイドバー・一覧を組み立て、
  * ビルド時に本文の H1 を落としてから自分の H1 を出す
- * （src/lib/drop-h1.satteri.mjs）。したがって次の 3 つを固定する。
+ * （src/lib/drop-h1.satteri.ts）。したがって次の 3 つを固定する。
  *
  *  1. frontmatter に title を書かない
  *  2. 本文 H1 がちょうど 1 つ（コードフェンス内の `#` は除外）
@@ -14,19 +14,25 @@
  */
 import { readdir, readFile } from 'node:fs/promises';
 import { join, relative } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const ROOT = new URL('../src/content/pages', import.meta.url);
+const ROOT = fileURLToPath(new URL('../src/content/pages', import.meta.url));
 
-function split(text) {
+interface Parts {
+  fm: string;
+  body: string;
+}
+
+function split(text: string): Parts {
   const m = text.match(/^---\n([\s\S]*?)\n---\n?/);
   if (!m) return { fm: '', body: text };
   return { fm: m[1], body: text.slice(m[0].length) };
 }
 
 /** コードフェンス内の `#` はコメントなので H1 として数えない */
-function headings(body) {
-  const out = [];
-  let fence = null;
+function headings(body: string): string[] {
+  const out: string[] = [];
+  let fence: string | null = null;
   for (const line of body.split('\n')) {
     const m = line.match(/^\s*(`{3,}|~{3,})/);
     if (m) {
@@ -40,8 +46,8 @@ function headings(body) {
   return out;
 }
 
-async function walk(dir) {
-  const out = [];
+async function walk(dir: string): Promise<string[]> {
+  const out: string[] = [];
   for (const e of await readdir(dir, { withFileTypes: true })) {
     const p = join(dir, e.name);
     if (e.isDirectory()) out.push(...(await walk(p)));
@@ -50,9 +56,9 @@ async function walk(dir) {
   return out;
 }
 
-const problems = [];
-for (const f of await walk(ROOT.pathname)) {
-  const rel = relative(ROOT.pathname, f);
+const problems: string[] = [];
+for (const f of await walk(ROOT)) {
+  const rel = relative(ROOT, f);
   // サイトのトップ（src/content/pages/index.md）はテンプレート固定なので対象外
   if (rel === 'index.md') continue;
 

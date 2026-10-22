@@ -4,8 +4,8 @@ import Base from '../layouts/Base.astro';
 import DocsTree from '../components/DocsTree.astro';
 import TagList from '../components/TagList.astro';
 import Toc from '../components/Toc.astro';
-import { tagSlug } from '../lib/slug.mjs';
-import { titleOf } from '../lib/title.mjs';
+import { tagSlug } from '../lib/slug.ts';
+import { titleOf } from '../lib/title.ts';
 import tagSlugs from '../data/tag-slugs.json';
 
 export async function getStaticPaths() {

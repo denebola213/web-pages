@@ -1,6 +1,6 @@
 import { getCollection } from 'astro:content';
 import type { APIRoute } from 'astro';
-import { tagSlug } from '../lib/slug.mjs';
+import { tagSlug } from '../lib/slug.ts';
 import tagSlugs from '../data/tag-slugs.json';
 
 /** Own /sitemap.xml instead of an integration-generated /sitemap-index.xml,

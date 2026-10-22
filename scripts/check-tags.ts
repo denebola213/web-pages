@@ -6,13 +6,16 @@
  */
 import { readdir, readFile } from 'node:fs/promises';
 import { join, relative } from 'node:path';
-import { slugifySegment } from '../src/lib/slug.mjs';
+import { fileURLToPath } from 'node:url';
+import { slugifySegment } from '../src/lib/slug.ts';
 
-const ROOT = new URL('../src/content/pages', import.meta.url);
-const map = JSON.parse(await readFile(new URL('../src/data/tag-slugs.json', import.meta.url), 'utf8'));
+const ROOT = fileURLToPath(new URL('../src/content/pages', import.meta.url));
+const map: Record<string, string> = JSON.parse(
+  await readFile(new URL('../src/data/tag-slugs.json', import.meta.url), 'utf8'),
+);
 
 /** frontmatter の tags: ブロックだけを素朴に読む（このリポジトリの書式に限定） */
-function tagsOf(text) {
+function tagsOf(text: string): string[] {
   const m = text.match(/^---\n([\s\S]*?)\n---/);
   if (!m) return [];
   const lines = m[1].split('\n');
@@ -20,9 +23,13 @@ function tagsOf(text) {
   if (i === -1) return [];
   const inline = lines[i].replace(/^tags:\s*/, '').trim();
   if (inline.startsWith('[')) {
-    return inline.replace(/^\[|\]$/g, '').split(',').map((s) => s.trim().replace(/^["']|["']$/g, '')).filter(Boolean);
+    return inline
+      .replace(/^\[|\]$/g, '')
+      .split(',')
+      .map((s) => s.trim().replace(/^["']|["']$/g, ''))
+      .filter(Boolean);
   }
-  const out = [];
+  const out: string[] = [];
   for (const line of lines.slice(i + 1)) {
     const t = line.match(/^\s+-\s*(.+)$/);
     if (!t) break;
@@ -31,8 +38,8 @@ function tagsOf(text) {
   return out;
 }
 
-async function walk(dir) {
-  const files = [];
+async function walk(dir: string): Promise<string[]> {
+  const files: string[] = [];
   for (const e of await readdir(dir, { withFileTypes: true })) {
     const p = join(dir, e.name);
     if (e.isDirectory()) files.push(...(await walk(p)));
@@ -41,41 +48,49 @@ async function walk(dir) {
   return files;
 }
 
-const files = await walk(ROOT.pathname);
-const terms = new Map();
+interface Problem {
+  tag: string;
+  why: string;
+  files: string[];
+}
+
+const files = await walk(ROOT);
+const terms = new Map<string, string[]>();
 for (const f of files) {
   for (const t of tagsOf(await readFile(f, 'utf8'))) {
-    if (!terms.has(t)) terms.set(t, []);
-    terms.get(t).push(relative(ROOT.pathname, f));
+    const owners = terms.get(t);
+    if (owners) owners.push(relative(ROOT, f));
+    else terms.set(t, [relative(ROOT, f)]);
   }
 }
 
-const problems = [];
+const problems: Problem[] = [];
 const nonAscii = [...terms.keys()].filter((t) => /[^\x00-\x7F]/.test(t));
 
 // 異なるタグ名が同じスラッグに落ちると、同じ URL のタグページが 2 つできる。
 // （例: "tech_other" と "tech-other" → どちらも /tags/tech-other/）
-const bySlug = new Map();
+const bySlug = new Map<string, string[]>();
 for (const t of terms.keys()) {
   const slug = map[t] ?? slugifySegment(t);
-  if (!bySlug.has(slug)) bySlug.set(slug, []);
-  bySlug.get(slug).push(t);
+  const names = bySlug.get(slug);
+  if (names) names.push(t);
+  else bySlug.set(slug, [t]);
 }
 for (const [slug, names] of bySlug) {
   if (names.length > 1) {
     problems.push({
       tag: names.join(' / '),
       why: `スラッグ衝突: すべて /tags/${slug}/ になる`,
-      files: names.flatMap((n) => terms.get(n)),
+      files: names.flatMap((n) => terms.get(n) ?? []),
     });
   }
 }
 for (const t of nonAscii) {
   const slug = map[t];
   if (!slug) {
-    problems.push({ tag: t, why: 'スラッグ未定義', files: terms.get(t) });
+    problems.push({ tag: t, why: 'スラッグ未定義', files: terms.get(t) ?? [] });
   } else if (slug !== slugifySegment(slug)) {
-    problems.push({ tag: t, why: `スラッグ "${slug}" が URL 安全でない`, files: terms.get(t) });
+    problems.push({ tag: t, why: `スラッグ "${slug}" が URL 安全でない`, files: terms.get(t) ?? [] });
   }
 }
 

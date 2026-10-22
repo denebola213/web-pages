@@ -13,21 +13,24 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "check:filenames": "node scripts/check-filenames.mjs",
-    "check": "node scripts/check-filenames.mjs && node scripts/check-content.mjs && markdownlint-cli2 && node scripts/check-tags.mjs && node scripts/check-redirects.mjs && node scripts/check-contrast.mjs",
+    "check:filenames": "node scripts/check-filenames.ts",
+    "check": "node scripts/check-filenames.ts && node scripts/check-content.ts && markdownlint-cli2 && node scripts/check-tags.ts && node scripts/check-redirects.ts && node scripts/check-contrast.ts",
     "deploy": "pnpm dlx wrangler@4.151.3 deploy",
-    "check:tags": "node scripts/check-tags.mjs",
-    "check:content": "node scripts/check-content.mjs",
+    "check:tags": "node scripts/check-tags.ts",
+    "check:content": "node scripts/check-content.ts",
     "lint:md": "markdownlint-cli2",
-    "check:contrast": "node scripts/check-contrast.mjs",
-    "check:redirects": "node scripts/check-redirects.mjs",
-    "post:mastodon": "node scripts/post-mastodon.mjs"
+    "check:contrast": "node scripts/check-contrast.ts",
+    "check:redirects": "node scripts/check-redirects.ts",
+    "post:mastodon": "node scripts/post-mastodon.ts",
+    "typecheck": "astro sync && tsc --noEmit"
   },
   "dependencies": {
     "@astrojs/markdown-satteri": "^0.4.4",
     "astro": "^7.4.1"
   },
   "devDependencies": {
-    "markdownlint-cli2": "^0.24.0"
+    "@types/node": "^24.19.2",
+    "markdownlint-cli2": "^0.24.0",
+    "typescript": "^7.0.2"
   }
 }
