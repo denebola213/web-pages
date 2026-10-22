@@ -411,14 +411,14 @@ pre.mermaid {
 
 /* 当たり判定を文字の幅に揃える。幅いっぱいの flex にすると、
    文字の無い右側の空白までホバー・クリックが効いてしまう。
-   fit-content なら折り返し（flex-wrap）はそのまま効く。 */
+   縦積み（column）なので説明文は必ずタイトルの次行に来る。 */
 .home-links a {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
   width: fit-content;
   max-width: 100%;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.75rem;
   padding: 1.1rem 0;
   color: var(--color-link);
   text-decoration: none;
