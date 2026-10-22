@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import { satteri } from '@astrojs/markdown-satteri';
 import mermaid from './src/lib/mermaid.satteri.mjs';
 import dropH1 from './src/lib/drop-h1.satteri.mjs';
+import figure from './src/lib/figure.satteri.mjs';
 import imageAttrs from './src/lib/image-attrs.integration.mjs';
 
 export default defineConfig({
@@ -12,7 +13,7 @@ export default defineConfig({
   build: { format: 'directory' },
   markdown: {
     // standard ```mermaid fences -> diagrams, no shortcode in the article
-    processor: satteri({ mdastPlugins: [dropH1, mermaid] }),
+    processor: satteri({ mdastPlugins: [dropH1, mermaid, figure] }),
     shikiConfig: { theme: 'github-light', wrap: true },
   },
   // 生成 HTML の <img> に width/height を付ける（CLS 対策）

@@ -296,7 +296,7 @@ hr {
   border-radius: var(--radius-4);
 }
 
-/* 画像 + キャプション（ビルド時に figure 化） */
+/* 画像 + キャプション（Markdown の段落から figure 化） */
 .markdown-content figure { margin: 1.75rem 0; }
 
 .markdown-content figcaption {

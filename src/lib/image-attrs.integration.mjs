@@ -70,8 +70,6 @@ function sizeOf(src) {
 
 const IMG = /<img\b([^>]*?)\bsrc="(\/image\/[^"]+)"([^>]*?)\/?>/g;
 
-/** 画像だけを含む段落 → figure + figcaption（alt をキャプションにする） */
-const FIG = /<p>\s*(<img\b[^>]*>)\s*<\/p>/g;
 
 export default function imageAttrs() {
   return {
@@ -80,13 +78,11 @@ export default function imageAttrs() {
       'astro:build:done': async ({ dir, logger }) => {
         const out = fileURLToPath(dir);
         let added = 0;
-        let capped = 0;
         for (const file of await walk(out)) {
           if (!file.endsWith('.html')) continue;
           const html = await readFile(file, 'utf8');
           let hit = 0;
-          let caps = 0;
-          let next = html.replace(IMG, (m, before, src, after) => {
+          const next = html.replace(IMG, (m, before, src, after) => {
             if (/\bwidth=/.test(before + after)) return m;
             const size = sizeOf(src);
             if (!size) return m;
@@ -94,20 +90,12 @@ export default function imageAttrs() {
             const rest = (before + after).replace(/\s+/g, ' ').trim();
             return `<img ${rest ? rest + ' ' : ''}src="${src}" width="${size.width}" height="${size.height}" decoding="async">`;
           });
-          // 画像だけの段落は figure にして、alt を画像下のキャプションにする
-          next = next.replace(FIG, (m, img) => {
-            const alt = (img.match(/\balt="([^"]*)"/) || [])[1] || '';
-            if (!alt.trim()) return m;
-            caps += 1;
-            return `<figure>${img}<figcaption>${alt}</figcaption></figure>`;
-          });
-          if (hit || caps) {
+          if (hit) {
             await writeFile(file, next);
             added += hit;
-            capped += caps;
           }
         }
-        logger.info(`${added} 枚の画像に width/height を付与（うち ${capped} 枚を figure + キャプション化）`);
+        logger.info(`${added} 枚の画像に width/height を付与`);
       },
     },
   };
