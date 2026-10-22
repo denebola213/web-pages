@@ -19,7 +19,7 @@ pnpm build    # dist/ へ静的出力
 pnpm check    # URL・タイトル・Markdown・タグ・リダイレクト・コントラストの検査
 ```
 
-`pnpm check` は CI でも同じものを回す。デプロイ前に必ず通すこと。
+`pnpm check` は GitHub Actions（`ci.yml`）でも同じものを回す。`pull_request` で走るので、マージ前に必ず緑にする（ブランチ保護で `ci / check` を必須にしておくと確実）。
 
 パッケージマネージャは **pnpm**（`package.json` の `packageManager` でバージョン固定）。`package-lock.json` は持たない。
 
