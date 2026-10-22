@@ -22,11 +22,13 @@ async function walk(dir) {
     const stem = e.name.replace(/\.md$/, '');
     if (stem === 'index') continue;
     const fixed = slugifySegment(stem);
-    if (fixed !== stem) {
+    const nonAscii = /[^\x00-\x7F]/.test(stem);
+    // slugify で変わらない非 ASCII 名（例: 天体.md）も URL が非 ASCII になるため弾く
+    if (nonAscii || fixed !== stem) {
       problems.push({
         file: relative(ROOT.pathname, p),
         fixed,
-        reason: /[^\x00-\x7F]/.test(stem) ? '非ASCII' : '_ または大文字を含む',
+        reason: nonAscii ? '非ASCII' : '_ または大文字を含む',
       });
     }
   }
