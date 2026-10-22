@@ -160,6 +160,14 @@ hr {
 
 .page-list .date-info { margin-top: 0.2rem; }
 
+/* docs 索引の記事一覧（セクション名は補助情報として小さく添える） */
+.list-section { color: var(--color-text-sub); }
+.list-section::after {
+  content: "·";
+  margin-left: 0.6rem;
+  color: var(--color-border-strong);
+}
+
 /* 年別見出し */
 .year-heading {
   margin: 3rem 0 0.5rem;
