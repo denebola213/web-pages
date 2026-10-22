@@ -43,7 +43,6 @@
   --radius-4: 0.25rem;
   --radius-6: 0.375rem;
   --measure: 44rem;      /* 本文の行長（約 40 全角字） */
-  --measure-wide: 66rem; /* サイドバー込みの幅 */
   --font-sans: 'Noto Sans JP', system-ui, -apple-system, 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
   --font-mono: 'Noto Sans Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --leading: 1.8;

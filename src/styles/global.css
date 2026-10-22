@@ -42,9 +42,9 @@ a:visited { color: var(--color-link-visited); }
 /* ナビゲーション・一覧では訪問色を抑制する */
 .crumbs a:visited,
 .page-list a:visited,
+.docs-tree a:visited,
 .tag-index a:visited,
 .tags a:visited,
-.docs-nav a:visited,
 .home-links a:visited { color: inherit; }
 
 /* =========================================================
@@ -56,7 +56,6 @@ a:visited { color: var(--color-link-visited); }
   padding: 0 1.25rem 5rem;
 }
 
-.main.wide { max-width: var(--measure-wide); }
 
 /* =========================================================
    パンくず
@@ -277,66 +276,38 @@ pre.mermaid {
 .markdown-content th { font-weight: 700; }
 
 /* =========================================================
-   ドキュメント: サイドツリー
+   ドキュメント: ツリー（本文側に全面表示）
    ========================================================= */
-.docs-grid {
-  display: grid;
-  grid-template-columns: 13.5rem minmax(0, 1fr);
-  gap: 3.5rem;
-  align-items: start;
-}
-
-.docs-nav {
-  position: sticky;
-  top: 2rem;
-  align-self: start;
-  max-height: calc(100vh - 4rem);
-  overflow-y: auto;
-  padding-right: 1.25rem;
-  border-right: 1px solid var(--color-border);
-  font-size: 0.875rem;
-  line-height: 1.7;
-}
-
-.docs-nav > summary { display: none; }
-
-.docs-nav .home {
-  display: inline-block;
-  margin-bottom: 1rem;
-  color: var(--color-text-sub);
-  font-size: 0.8125rem;
-  text-decoration: none;
-}
-
-.docs-nav .home:hover { color: var(--color-primary); text-decoration: underline; }
-
-.docs-nav ul {
+.docs-tree {
   list-style: none;
-  margin: 0;
+  margin: 0 0 2rem;
   padding: 0;
+  font-size: 0.9375rem;
+  line-height: 1.9;
 }
 
-.docs-nav li { margin: 0; }
+/* 入れ子は 1px の罫線で階層を示す（影・面は使わない） */
+.docs-tree ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  border-left: 1px solid var(--color-border);
+}
 
-.docs-nav a {
-  display: block;
-  padding: 0.2rem 0 0.2rem 0.6rem;
-  border-left: 2px solid transparent;
-  color: var(--color-text);
+.docs-tree li { margin: 0; }
+
+.docs-tree a {
+  color: inherit;
   text-decoration: none;
 }
 
-.docs-nav a:hover { color: var(--color-primary); text-decoration: underline; }
+.docs-tree a:hover { color: var(--color-primary); text-decoration: underline; }
 
-.docs-nav a[aria-current] {
-  border-left-color: var(--color-primary);
+.docs-tree a[aria-current] {
   color: var(--color-primary);
   font-weight: 700;
 }
 
-.docs-nav .group > a { font-weight: 700; margin-top: 0.6rem; }
-.docs-nav .group > ul { padding-left: 0.5rem; }
-.docs-nav .group > ul a { color: #3b4149; }
+.docs-tree .has-children > a { font-weight: 700; }
 
 /* =========================================================
    ホーム（2 リンクのみ）
@@ -380,30 +351,6 @@ pre.mermaid {
 /* =========================================================
    狭い画面
    ========================================================= */
-@media (max-width: 56rem) {
-  .docs-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
-
-  .docs-nav {
-    position: static;
-    max-height: none;
-    overflow: visible;
-    margin: 0 0 1.5rem;
-    padding: 0 0 1rem;
-    border-right: 0;
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .docs-nav > summary {
-    display: block;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 0.875rem;
-    color: var(--color-text-sub);
-  }
-
-  .docs-nav[open] > summary { margin-bottom: 0.75rem; }
-}
-
 @media (max-width: 32rem) {
   .main { padding: 0 1rem 4rem; }
   h1 { font-size: 1.5rem; }

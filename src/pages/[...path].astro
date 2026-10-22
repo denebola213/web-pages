@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import DocsNav from '../components/DocsNav.astro';
+import DocsTree from '../components/DocsTree.astro';
 import TagList from '../components/TagList.astro';
 import { tagSlug } from '../lib/slug.mjs';
 import { titleOf } from '../lib/title.mjs';
@@ -74,54 +74,22 @@ const diaryPosts = all
   .sort((a, b) => (b.data.date as Date).valueOf() - (a.data.date as Date).valueOf());
 const years = [...new Set(diaryPosts.map((p) => (p.data.date as Date).getUTCFullYear()))];
 
-/* ---- docs 索引の記事一覧（ツリーはサイドバーにあるので、ここはフラットに） ---- */
-const isSectionIndex = (id: string) => all.some((e) => e.id.startsWith(id + '/'));
-const docsArticles = all
-  .filter((e) => e.id.startsWith('docs/') && e.id !== 'docs' && !e.data.draft && !isSectionIndex(e.id))
-  .sort((a, b) => {
-    const da = a.data.date ? (a.data.date as Date).valueOf() : 0;
-    const db = b.data.date ? (b.data.date as Date).valueOf() : 0;
-    return db - da || titleOf(a).localeCompare(titleOf(b), 'ja');
-  });
-const sectionOf = (id: string) => {
-  const parent = id.split('/').slice(0, -1).join('/');
-  return parent === 'docs' ? '' : labelOf(parent);
-};
-
 const hasMeta = Boolean(entry.data.date) || entry.data.tags.length > 0;
 ---
 
-<Base title={title} description={description} crumbs={crumbs} wide={isDocs}>
+<Base title={title} description={description} crumbs={crumbs}>
   {isDocs ? (
-    <div class="docs-grid">
-      <DocsNav nodes={sideNodes} current={entry.id} />
-      <article>
-        <h1>{title}</h1>
-        {hasMeta && (
-          <p class="date-info">
-            {entry.data.date && <time datetime={fmt(entry.data.date)}>{fmt(entry.data.date)}</time>}
-            <TagList tags={entry.data.tags} slugOf={slugOf} />
-          </p>
-        )}
-        <div class="markdown-content"><div id="content"><Content /></div></div>
-        {entry.id === 'docs' && docsArticles.length > 0 && (
-          <section class="docs-list">
-            <h2 class="year-heading">記事一覧</h2>
-            <ul class="page-list">
-              {docsArticles.map((a) => (
-                <li>
-                  <a class="page-title" href={`/${a.id}/`}>{titleOf(a)}</a>
-                  <div class="date-info">
-                    {sectionOf(a.id) && <span class="list-section">{sectionOf(a.id)}</span>}
-                    {a.data.date && <time datetime={fmt(a.data.date)}>{fmt(a.data.date)}</time>}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
-      </article>
-    </div>
+    <article>
+      <h1>{title}</h1>
+      {hasMeta && (
+        <p class="date-info">
+          {entry.data.date && <time datetime={fmt(entry.data.date)}>{fmt(entry.data.date)}</time>}
+          <TagList tags={entry.data.tags} slugOf={slugOf} />
+        </p>
+      )}
+      <div class="markdown-content"><div id="content"><Content /></div></div>
+      {entry.id === 'docs' && <DocsTree nodes={sideNodes} current={entry.id} />}
+    </article>
   ) : entry.id === 'diary' ? (
     <>
       <article>
