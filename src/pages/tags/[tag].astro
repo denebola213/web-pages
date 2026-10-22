@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import TagList from '../../components/TagList.astro';
+import { tagSlug } from '../../lib/slug.mjs';
+import { titleOf } from '../../lib/title.mjs';
+import tagSlugs from '../../data/tag-slugs.json';
+
+const slugOf = (name: string) => tagSlug(name, tagSlugs as Record<string, string>);
+
+export async function getStaticPaths() {
+  const slug = (name: string) => tagSlug(name, tagSlugs as Record<string, string>);
+  const posts = await getCollection('pages', (e) => e.data.tags.length > 0 && !e.data.draft);
+  const names = [...new Set(posts.flatMap((p) => p.data.tags))];
+  return names.map((name) => ({
+    params: { tag: slug(name) },
+    props: { name, pages: posts.filter((p) => p.data.tags.includes(name)) },
+  }));
+}
+
+const { name, pages } = Astro.props;
+const fmt = (d?: Date) => (d ? d.toISOString().slice(0, 10) : '');
+---
+
+<Base title={`#${name}`} crumbs={[{ href: '/tags/', label: 'タグ' }, { label: `#${name}` }]}>
+  <h1>#{name}</h1>
+  <ul class="page-list">
+    {pages.map((p) => (
+      <li>
+        <a class="page-title" href={`/${p.id}/`}>{titleOf(p)}</a>
+        <p class="date-info">{fmt(p.data.date)}<TagList tags={p.data.tags} slugOf={slugOf} /></p>
+      </li>
+    ))}
+  </ul>
+</Base>

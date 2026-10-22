@@ -1,13 +1,29 @@
 {
   "name": "denebola213_pages",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "dependencies": {
-    "bootstrap": "^4.5.3"
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.22.0"
   },
   "scripts": {
-    "serve": "zola serve",
-    "build": "zola build"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check:filenames": "node scripts/check-filenames.mjs",
+    "check": "node scripts/check-filenames.mjs && node scripts/check-content.mjs && npx markdownlint-cli2 && node scripts/check-tags.mjs && node scripts/check-redirects.mjs && node scripts/check-contrast.mjs",
+    "deploy": "astro build && npx wrangler deploy",
+    "check:tags": "node scripts/check-tags.mjs",
+    "check:content": "node scripts/check-content.mjs",
+    "lint:md": "markdownlint-cli2",
+    "check:contrast": "node scripts/check-contrast.mjs",
+    "check:redirects": "node scripts/check-redirects.mjs"
+  },
+  "dependencies": {
+    "@astrojs/markdown-satteri": "^0.4.4",
+    "astro": "^7.4.1"
+  },
+  "devDependencies": {
+    "markdownlint-cli2": "^0.24.0"
   }
 }

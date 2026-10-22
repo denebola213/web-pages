@@ -1,0 +1,44 @@
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  deployments: write
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+
+      # URL 互換の回帰テスト: 公開済み URL が 1 本でも欠けたら deploy しない
+      - name: 記事フォーマット / URL 互換チェック
+        run: |
+          node scripts/check-filenames.mjs   # ファイル名 = URL
+          node scripts/check-content.mjs     # title と本文 H1 の一致
+          npx markdownlint-cli2              # 記事 Markdown の書式
+          node scripts/check-tags.mjs        # 日本語タグのスラッグ確定
+          node scripts/check-redirects.mjs   # URL 欠落 / 301 の整合
+          node scripts/check-contrast.mjs    # WCAG のコントラスト要件
+
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy

@@ -1,0 +1,50 @@
+/**
+ * カラートークン — 自前のパレット。
+ * キーカラーは Light Blue 800 (#0066be) をそのまま継承する。
+ *
+ * 方針:
+ *  - 面の塗り分けを持たない。階層は 1px の罫線だけで表す。
+ *  - 値はすべて「白背景 4.5:1（テキスト）/ 3:1（非テキスト境界）」を満たす。
+ *  - 検証は scripts/check-contrast.mjs（CI で実行）。
+ */
+
+:root {
+  color-scheme: light;
+
+  /* ---- キーカラー（継承） ---- */
+  --blue-600: #0066be; /* 主要 UI                      白背景 5.76:1 */
+  --blue-700: #0055ad; /* 本文リンク                    7.23:1 */
+  --blue-900: #00428c; /* hover / 押下 / フォーカス     9.73:1 */
+
+  /* ---- ニュートラル ---- */
+  --ink-900: #1a1a1a;  /* 本文   17.40:1 */
+  --ink-600: #5f6673;  /* 補助    5.78:1 */
+  --line-200: #e3e6ea; /* 罫線（装飾。コントラスト要件の対象外） */
+  --line-500: #8b929e; /* 操作要素の境界 3.13:1 */
+
+  /* ---- 役割 ---- */
+  --color-bg: #ffffff;
+  --color-text: var(--ink-900);
+  --color-text-sub: var(--ink-600);
+  --color-border: var(--line-200);
+  --color-border-strong: var(--line-500);
+
+  --color-primary: var(--blue-600);
+  --color-primary-hover: var(--blue-900);
+  --color-link: var(--blue-700);
+  --color-link-visited: #6b3fa0; /* 7.38:1 */
+  --color-focus: var(--blue-900);
+
+  --color-success: #147a4b; /* 5.36:1 */
+  --color-error: #b3261e;   /* 6.54:1 */
+  --color-warning: #7a5a00; /* 6.38:1 */
+
+  /* ---- 形状・組版 ---- */
+  --radius-4: 0.25rem;
+  --radius-6: 0.375rem;
+  --measure: 44rem;      /* 本文の行長（約 40 全角字） */
+  --measure-wide: 66rem; /* サイドバー込みの幅 */
+  --font-sans: 'Noto Sans JP', system-ui, -apple-system, 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+  --font-mono: 'Noto Sans Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --leading: 1.8;
+}

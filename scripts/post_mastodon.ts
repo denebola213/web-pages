@@ -71,13 +71,14 @@ async function get_update_url(sha: string) {
   const { stdout } = await command.output();
 
   const out_list = new TextDecoder().decode(stdout).split(/\n/);
+  // Astro 版のコンテンツ配置: src/content/pages/{docs,diary}/**.md
+  // セクション索引（index.md）はディレクトリ自体が URL なので除外する。
   const url_list = out_list
-    .map((o) => [...o.matchAll(/content(\/(?:tech|diary).*)\./g)].flat())
-    .filter((mat) => mat.length >= 2)
-    .map((mat) => mat[1])
-    .filter((file) => /\/[^_].*?$/.test(file))
+    .map((o) => o.match(/^src\/content\/pages(\/(?:docs|diary)\/.+)\.md$/)?.[1])
+    .filter((p): p is string => Boolean(p))
+    .filter((file) => !file.endsWith('/index'))
     .map((file) => file.replace(/_/g, '-'))
-    .map((file) => "https://www.st-albireo.net" + file);
+    .map((file) => "https://www.st-albireo.net" + file + "/");
 
   return url_list;
 }

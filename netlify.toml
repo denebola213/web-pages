@@ -1,9 +1,7 @@
 [build]
-publish = "public"
-command = "zola build"
+  # Zola から Astro へ。publish は dist（Astro の既定出力）
+  command = "npm ci && npm run build"
+  publish = "dist"
 
 [build.environment]
-ZOLA_VERSION = "0.22.1"
-
-[context.deploy-preview]
-command = "zola build --base-url $DEPLOY_PRIME_URL"
+  NODE_VERSION = "22"

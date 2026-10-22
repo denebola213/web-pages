@@ -1,0 +1,44 @@
+---
+import '../styles/global.css';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+interface Crumb { href?: string; label: string; }
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogTitle?: string;
+  crumbs?: Crumb[];
+  wide?: boolean;
+}
+
+const { title, description = "denebola213's web pages", ogTitle, crumbs, wide = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const pageTitle = title ? `${title} - denebola213 pages` : 'denebola213 pages';
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0066be" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="canonical" href={canonical} />
+    <meta name="description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={ogTitle ?? pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={new URL('/dene.png', Astro.site)} />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <main class:list={['main', { wide }]}>
+      {crumbs && <Breadcrumbs items={crumbs} />}
+      <slot />
+    </main>
+    <footer class="footer"><small>&copy; 2020 denebola213</small></footer>
+    <slot name="scripts" />
+  </body>
+</html>
