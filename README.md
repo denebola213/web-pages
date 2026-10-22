@@ -9,7 +9,6 @@ https://www.st-albireo.net のソース。Astro による完全静的サイト�
 | `/diary/` | 日付順の記事。URL は `/diary/YYYYMMDD/` で年ごとに割らない |
 | `/docs/` | 技術ドキュメント。階層ツリーで辿る |
 | `/tags/` | タグ別の一覧 |
-| `/docs/about/` | 自己紹介 |
 
 ## 開発
 

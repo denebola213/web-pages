@@ -415,6 +415,18 @@ pre.mermaid {
 .home-links .t { font-size: 1.125rem; font-weight: 700; }
 .home-links .d { color: var(--color-text-sub); font-size: 0.8125rem; }
 
+/* ホーム下部の自己紹介 */
+.home-intro {
+  margin-top: 2.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.9;
+}
+
+.home-intro p { margin: 0 0 1rem; }
+.home-intro ul { margin: 0; padding-left: 1.15rem; }
+.home-intro li { margin: 0.2rem 0; }
+.home-intro ul ul { margin: 0.2rem 0 0; }
+
 /* =========================================================
    フッター
    ========================================================= */
