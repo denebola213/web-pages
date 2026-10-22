@@ -399,7 +399,7 @@ pre.mermaid {
 .docs-tree .has-children > a { font-weight: 700; }
 
 /* =========================================================
-   ホーム（2 リンクのみ）
+   ホーム（3 リンクのみ）
    ========================================================= */
 .home-links {
   list-style: none;
@@ -409,8 +409,13 @@ pre.mermaid {
 
 .home-links li { margin: 0; }
 
+/* 当たり判定を文字の幅に揃える。幅いっぱいの flex にすると、
+   文字の無い右側の空白までホバー・クリックが効いてしまう。
+   fit-content なら折り返し（flex-wrap）はそのまま効く。 */
 .home-links a {
   display: flex;
+  width: fit-content;
+  max-width: 100%;
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.75rem;
