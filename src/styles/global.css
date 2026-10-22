@@ -273,9 +273,16 @@ hr {
 
 .toc li { margin: 0.1rem 0; }
 
-.toc a { color: var(--color-link); text-decoration: none; }
-.toc a:hover { text-decoration: underline; }
-.toc a:visited { color: var(--color-link); }
+/* 目次は面が青いので、リンクは一段濃い青（#00428c / 8.0:1）＋下線で色だけに頼らない */
+.toc a {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
+.toc a:hover { color: var(--color-primary); }
+.toc a:visited { color: var(--color-primary-hover); }
 
 /* =========================================================
    本文（Markdown 由来）
