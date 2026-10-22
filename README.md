@@ -32,9 +32,11 @@ npm run check    # URL・タイトル・Markdown・タグ・リダイレクト�
 
 ## デプロイ
 
-本番は Netlify（`netlify.toml`）。`public/_redirects` は Netlify と Cloudflare Workers の双方が解釈するが、**`astro dev` では効かない**ので 301 の確認は `npx wrangler dev` かプレビュー環境で行う。
+Cloudflare Workers（静的アセット）へ GitHub Actions でデプロイする。`master` への push で `npm ci` → `npm run build` → 検査 → `wrangler deploy` が走る。
 
-Cloudflare Workers へ移す場合の設定（`wrangler.jsonc`、`.github/workflows/deploy.yml`）も同梱してある。併用すると二重デプロイになるため、どちらか一方に決めて他方を外すこと。
+必要なリポジトリシークレット: `CLOUDFLARE_API_TOKEN`、`CLOUDFLARE_ACCOUNT_ID`。
+
+`public/_redirects` は Cloudflare の静的アセットが解釈する。**`astro dev` では効かない**ので、301 の確認は `npx wrangler dev` で行う。
 
 ## ライセンス
 

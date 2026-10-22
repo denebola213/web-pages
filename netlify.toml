@@ -1,7 +1,0 @@
-[build]
-  # Zola から Astro へ。publish は dist（Astro の既定出力）
-  command = "npm ci && npm run build"
-  publish = "dist"
-
-[build.environment]
-  NODE_VERSION = "22"
