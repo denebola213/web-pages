@@ -8,6 +8,12 @@ astro dev --background
 
 Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
 
+## Toolchain
+
+- Node は 24 系（`engines.node: ">=24.0.0"`）。パッケージマネージャは pnpm 12。
+- `scripts/` と `src/lib/`、`astro.config.ts` はすべて TypeScript。Node の型剥がしで直接実行するので tsx / ts-node は使わない（`node scripts/check-tags.ts` のように呼ぶ）。相対 import は拡張子まで書く（`./slug.ts`）。
+- 型検査は `pnpm typecheck`（`astro sync && tsc --noEmit`）。`pnpm check` と並んで CI で走る。
+
 ## Documentation
 
 Full documentation: https://docs.astro.build
@@ -27,10 +33,10 @@ Consult these guides before working on related tasks:
 
 ## Content conventions
 
-- **タイトルは本文の `# 見出し` だけ**。frontmatter に `title` は書かない（`scripts/check-content.mjs` が CI で弾く）。`<title>`・パンくず・サイドバー・一覧はすべてこの H1 から生成し、本文の H1 はビルド時に落として（`src/lib/drop-h1.satteri.mjs`）テンプレート側の 1 つに統一する。
+- **タイトルは本文の `# 見出し` だけ**。frontmatter に `title` は書かない（`scripts/check-content.ts` が CI で弾く）。`<title>`・パンくず・サイドバー・一覧はすべてこの H1 から生成し、本文の H1 はビルド時に落として（`src/lib/drop-h1.satteri.ts`）テンプレート側の 1 つに統一する。
 - 記事の Markdown は markdownlint に通す（`pnpm run lint:md`、CI でも実行）。行長・見出し末尾の記号・コード内タブは日本語向けに無効化済み（`.markdownlint-cli2.jsonc`）。
-- 画像は `public/image/` に置き、本文では `![代替テキスト](/image/foo.jpg)`。`width`/`height` はビルド後に自動付与される（`src/lib/image-attrs.integration.mjs`）。alt は必須で、`figure`/`figcaption` のキャプションにもなる（`src/lib/figure.satteri.mjs`）。
-- タグを使うのは docs だけ。日記に `tags:` を書くと `scripts/check-content.mjs` が落ちる。日本語タグは `src/data/tag-slugs.json` にスラッグを登録する。
+- 画像は `public/image/` に置き、本文では `![代替テキスト](/image/foo.jpg)`。`width`/`height` はビルド後に自動付与される（`src/lib/image-attrs.integration.ts`）。alt は必須で、`figure`/`figcaption` のキャプションにもなる（`src/lib/figure.satteri.ts`）。
+- タグを使うのは docs だけ。日記に `tags:` を書くと `scripts/check-content.ts` が落ちる。日本語タグは `src/data/tag-slugs.json` にスラッグを登録する。
 - 目次は本文の `##` / `###` から自動生成される（`src/components/Toc.astro`）。追加作業は不要。
 
 ## Vendored assets
