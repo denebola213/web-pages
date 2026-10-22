@@ -1,8 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import { tagSlug } from '../../lib/slug.mjs';
-import { titleOf } from '../../lib/title.mjs';
+import { tagSlug } from '../../lib/slug.ts';
+import { titleOf } from '../../lib/title.ts';
 import tagSlugs from '../../data/tag-slugs.json';
 
 // タグはブログ（diary）のみを対象にする。docs は階層で辿れる。

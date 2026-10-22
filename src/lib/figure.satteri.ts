@@ -8,17 +8,21 @@
  * 対象は「段落の子が画像 1 つだけ」のケース。文章中の画像やリンク付き画像は
  * そのまま段落として残す。alt が空ならキャプションを付けない。
  */
-const escAttr = (s) =>
-  String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+import type { MdastNode } from './mdast.ts';
 
-const escText = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const escAttr = (s: string): string =>
+  s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+const escText = (s: string): string =>
+  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 export default {
   name: 'figure-caption',
-  /** @param {import('mdast').Paragraph} node */
-  paragraph(node) {
+  paragraph(node: MdastNode): { type: 'html'; value: string } | undefined {
     // 空白だけのテキストノードは無視する
-    const kids = node.children.filter((c) => !(c.type === 'text' && !c.value.trim()));
+    const kids = (node.children ?? []).filter(
+      (c) => !(c.type === 'text' && !(c.value ?? '').trim()),
+    );
     if (kids.length !== 1) return;
     const img = kids[0];
     if (img.type !== 'image') return;
@@ -26,7 +30,7 @@ export default {
     const alt = (img.alt ?? '').trim();
     if (!alt) return;
 
-    const tag = `<img src="${escAttr(img.url)}" alt="${escAttr(alt)}">`;
+    const tag = `<img src="${escAttr(img.url ?? '')}" alt="${escAttr(alt)}">`;
     return {
       type: 'html',
       value: `<figure>${tag}<figcaption>${escText(alt)}</figcaption></figure>`,

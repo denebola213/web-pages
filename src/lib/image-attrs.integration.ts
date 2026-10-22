@@ -14,16 +14,23 @@
  * 既に width を持つもの）は触らない。
  * CSS 側の `img { height: auto }` が前提（無いと縦横比が崩れる）。
  */
+import type { AstroIntegration } from 'astro';
 import { readFileSync } from 'node:fs';
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-// src/lib/ から見た public/ は 2 階層上
-const PUBLIC = new URL('../../public/', import.meta.url).pathname;
+/** 画像の実寸（px） */
+export interface ImageSize {
+  width: number;
+  height: number;
+}
 
-/** PNG / JPEG / GIF のヘッダから {width, height} を読む */
-export function dimensions(buf) {
+// src/lib/ から見た public/ は 2 階層上
+const PUBLIC = fileURLToPath(new URL('../../public/', import.meta.url));
+
+/** PNG / JPEG / GIF のヘッダから実寸を読む。判定できない形式は null */
+export function dimensions(buf: Buffer): ImageSize | null {
   // PNG: IHDR の幅・高さ（ビッグエンディアン）
   if (buf.length > 24 && buf.readUInt32BE(0) === 0x89504e47) {
     return { width: buf.readUInt32BE(16), height: buf.readUInt32BE(20) };
@@ -55,10 +62,11 @@ export function dimensions(buf) {
   return null;
 }
 
-const cache = new Map();
-function sizeOf(src) {
-  if (cache.has(src)) return cache.get(src);
-  let size = null;
+const cache = new Map<string, ImageSize | null>();
+
+function sizeOf(src: string): ImageSize | null {
+  if (cache.has(src)) return cache.get(src) ?? null;
+  let size: ImageSize | null = null;
   try {
     size = dimensions(readFileSync(join(PUBLIC, src)));
   } catch {
@@ -70,8 +78,7 @@ function sizeOf(src) {
 
 const IMG = /<img\b([^>]*?)\bsrc="(\/image\/[^"]+)"([^>]*?)\/?>/g;
 
-
-export default function imageAttrs() {
+export default function imageAttrs(): AstroIntegration {
   return {
     name: 'image-attrs',
     hooks: {
@@ -82,14 +89,17 @@ export default function imageAttrs() {
           if (!file.endsWith('.html')) continue;
           const html = await readFile(file, 'utf8');
           let hit = 0;
-          const next = html.replace(IMG, (m, before, src, after) => {
-            if (/\bwidth=/.test(before + after)) return m;
-            const size = sizeOf(src);
-            if (!size) return m;
-            hit += 1;
-            const rest = (before + after).replace(/\s+/g, ' ').trim();
-            return `<img ${rest ? rest + ' ' : ''}src="${src}" width="${size.width}" height="${size.height}" decoding="async">`;
-          });
+          const next = html.replace(
+            IMG,
+            (m: string, before: string, src: string, after: string) => {
+              if (/\bwidth=/.test(before + after)) return m;
+              const size = sizeOf(src);
+              if (!size) return m;
+              hit += 1;
+              const rest = (before + after).replace(/\s+/g, ' ').trim();
+              return `<img ${rest ? rest + ' ' : ''}src="${src}" width="${size.width}" height="${size.height}" decoding="async">`;
+            },
+          );
           if (hit) {
             await writeFile(file, next);
             added += hit;
@@ -101,8 +111,8 @@ export default function imageAttrs() {
   };
 }
 
-async function walk(dir) {
-  const out = [];
+async function walk(dir: string): Promise<string[]> {
+  const out: string[] = [];
   for (const e of await readdir(dir, { withFileTypes: true })) {
     const p = join(dir, e.name);
     if (e.isDirectory()) out.push(...(await walk(p)));

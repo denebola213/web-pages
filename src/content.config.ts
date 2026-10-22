@@ -1,6 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
-import { idFromPath } from './lib/slug.mjs';
+import { idFromPath } from './lib/slug.ts';
 
 const pages = defineCollection({
   loader: glob({

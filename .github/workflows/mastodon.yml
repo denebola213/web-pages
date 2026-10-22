@@ -27,7 +27,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
 
       # 依存パッケージは使わない（node の組み込み fetch と src/lib のみ）ので install しない
       - name: Mastodon へ投稿
@@ -35,4 +35,4 @@ jobs:
           MASTODON_TOKEN: ${{ secrets.MASTODON_TOKEN }}
           BEFORE_SHA: ${{ github.event.before }}
           GITHUB_SHA: ${{ github.sha }}
-        run: node scripts/post-mastodon.mjs
+        run: node scripts/post-mastodon.ts
