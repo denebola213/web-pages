@@ -118,6 +118,7 @@ Workers & Pages → `st-albireo` → Settings → Builds で次を設定する�
 | Git branch | `master` |
 | Build command | `pnpm install --frozen-lockfile && pnpm build && pnpm check` |
 | Deploy command | `pnpm dlx wrangler@4.151.3 deploy` |
+| Preview command | `pnpm dlx wrangler@4.151.3 preview` |
 | Root directory | （空欄） |
 | Build variables | `PNPM_VERSION=12.14.0` |
 
@@ -126,7 +127,7 @@ Workers & Pages → `st-albireo` → Settings → Builds で次を設定する�
 - Node はビルドイメージ既定の 24 系（`engines.node: ">=22.22.0"` を満たす）
 - wrangler は devDependency に入れていない。`workerd` を含むとローカルの `node_modules` が数百 MB 増えるため、**deploy コマンド側でバージョンを固定**している。更新時はここを書き換える
 - 検査（`pnpm check`）がビルドコマンドに含まれるので、落ちればデプロイされない
-- `master` 以外のブランチはプレビュー（version としてアップロード）になる
+- `master` 以外のブランチは Worker Previews になる（`wrangler preview` を呼ぶ必要がある。既定は `npx wrangler preview`）。プレビューが不要なら Settings → Build → Branch control の **Enable Preview Builds** を外す
 - Worker 名・アセット設定は `wrangler.jsonc`（`name: st-albireo`、`assets.directory: ./dist`、`html_handling: auto-trailing-slash`、`not_found_handling: 404-page`）
 
 `public/_redirects` は Cloudflare の静的アセットが解釈する。**`astro dev` では効かない**ので、301 の確認は `pnpm dlx wrangler dev` で行う。
