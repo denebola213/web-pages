@@ -454,6 +454,18 @@ pre.mermaid {
   font-size: 0.8125rem;
 }
 
+/* footer 2 行目: PGP フィンガープリント */
+.footer .pgp {
+  margin: 0.45rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+.footer .pgp-fp {
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
 /* =========================================================
    狭い画面
    ========================================================= */
